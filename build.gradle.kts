@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.regex.Pattern.compile
 
 plugins {
     kotlin("jvm") version "1.5.31"
@@ -13,6 +14,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    //implementation(kotlin("reflect"))
+    compile("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 }
 
 tasks.test {
