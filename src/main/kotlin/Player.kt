@@ -1,18 +1,53 @@
-open class Player {
+abstract class Player(open val name: String, open val House: house) {
     val Hand = Deck(decktype.Empty)
-    val DrawPile = Deck(decktype.Starter)
+    var DrawPile = Deck(decktype.Empty)
     val DiscardPile = Deck(decktype.Empty)
-    val Companions = Deck(decktype.Empty)
+    val Allies = Deck(decktype.Empty)
+    val Played = Deck(decktype.Empty)
 
     var Health = 7
+    var Stuns = 3
 
     var Hearts = 0
-    var Lightnings = 0;
+    var Attacks = 0;
     var Coins = 0;
+
+    fun creasteStarterPile(dtype: decktype){
+        DrawPile = Deck(dtype)
+    }
+
+    fun hasAllyWithHouse(h: house): Boolean{
+        for (c in Allies.cards){
+            if (c.house == h){
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun toString(): String {
+        return """
+$name: ($House)
+Hand: ${Hand.cards}
+Allies: ${Allies.cards}
+HP: $Health
+Stuns: $Stuns
+<3 : $Hearts
+*  : $Attacks
+¤  : $Coins
+"""
+
+    }
 }
 
-class Human: Player() {
+data class Human(override val name: String = "human", override val House: house = house.None): Player(name, House) {
+    override fun toString(): String {
+        return super.toString()
+    }
 }
 
-class Computer: Player() {
+data class Computer(override val name: String = "computer", override val House: house = house.None): Player(name, House) {
+    override fun toString(): String {
+        return super.toString()
+    }
 }

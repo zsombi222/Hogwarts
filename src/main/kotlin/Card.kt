@@ -1,568 +1,722 @@
+enum class Type{
+    Item,
+    Spell,
+    Ally,
+    Curse
+}
+
+
 abstract class Card(val house: house,val value: Int, val name: String, val type: Type) {
-    abstract fun play()
-    fun drop() {}
+    open fun play(): Rule? {
+        Game.current.Hand.cards.remove(this)
+        Game.current.Played.cards.add(this)
+        return null
+    }
+    open fun drop() {
+        Game.current.Hand.cards.remove(this)
+        Game.current.DiscardPile.cards.add(this)
+    }
+    open fun use(): Rule? { return null }
     override fun toString(): String {
         return name
     }
+
 }
 
 class Aguamenti: Card(house.None, 3, "aguamenti", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        Game.current.apply{
+            Coins += 2
+            Hearts++
+        }
+        Events.spellPlayedEvent()
+        super.play()
+        return null
     }
 }
 
-class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Companion){
-    override fun play() {
-
+class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Ally){
+    var used = false
+    var player: Player? = null
+    override fun play(): Rule? {
+        player = Game.current
+        used = false
+        Events.roundEndedEvents[this] = ::reset
+        Game.current.Hand.cards.remove(this)
+        Game.current.Allies.cards.add(this)
+        return null
     }
+
+    override fun drop() {
+        Events.roundEndedEvents.remove(this)
+    }
+
+    override fun use(): Rule? {
+        if(!used && Game.current == player){
+            used = true
+            Game.current.apply{
+                Attacks++
+                Coins++
+                Hearts++
+                Hand.cards.addAll(DrawPile.draw(1))
+            }
+        }
+        return null
+    }
+
+    fun reset(){
+        used = false
+    }
+
 }
 
 class Alohomora: Card(house.None, 0, "Alohomora", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        Game.current.Coins += 1
+        Events.spellPlayedEvent()
+        super.play()
+        return null
     }
 }
 
 class Altatoital: Card(house.None, 7, "Altatóital", Type.Item){
-    override fun play() {
+    override fun play(): Rule? {
+        Game.current.apply {
+            Attacks += 2
+        }
+        super.play()
+        val r = Rule(::discardAlly, "Válassz szövetségest: [0-${Game.opponent.Allies.cards.size-1}]")
+        Events.itemPlayedEvent()
+        return r
+    }
 
+    fun discardAlly(r: Rule): Boolean{
+        try{
+            Game.opponent.DiscardPile.cards.add(Game.opponent.Allies.cards.removeAt(r.n))
+            return true
+        } catch (e: Exception) {
+            println("Nincs ilyen szövetséges")
+        }
+        return false
     }
 }
 
 class Aranycikesz: Card(house.None, 8, "Aranycikesz", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        Game.current.apply {
+            if (Allies.cards.size >= 2) {
+                Coins += 3
+                Hand.cards.addAll(DrawPile.draw(2))
+            } else {
+                Attacks++
+                Hearts++
+            }
+        }
+        Events.itemPlayedEvent()
+        super.play()
+        return null
     }
 }
 
 class Arresto_momentum: Card(house.None, 3, "Arresto momentum", Type.Spell){
-    override fun play() {
+    override fun play(): Rule? {
+        Game.current.apply {
+            Hearts++
+            Hand.cards.addAll(DrawPile.draw(1))
+        }
+        Events.spellPlayedEvent()
+        super.play()
+        return null
+    }
 
+    override fun drop() {
+        Game.current.apply {
+            Hearts++
+        }
+        super.drop()
     }
 }
 
 class Ascendio: Card(house.None, 4, "Ascendio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        Game.current.apply {
+            Coins += 2
+            Hand.cards.addAll(DrawPile.draw(1))
+        }
+        Events.spellPlayedEvent()
+        super.play()
+        return null
     }
 }
 
-class Bagoly: Card(house.None, 0, "Bagoly", Type.Companion){
-    override fun play() {
-
+class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
+    var coins = 0
+    var used = false
+    override fun play(): Rule? {
+        Events.roundEndedEvents[this] = ::reset
+        Game.current.Hand.cards.remove(this)
+        Game.current.Allies.cards.add(this)
+        return null
     }
+
+    override fun use(): Rule? {
+        if(!used) {
+            return Rule(::chooseFunction, "0 - rakj félre egy érmét\n1 - vedd el az összeset")
+        }
+        return null
+    }
+
+    override fun drop() {
+        coins = 0
+        Events.roundEndedEvents.remove(this)
+        super.drop()
+    }
+
+    fun reset(){
+        used = false
+    }
+
+    fun chooseFunction(r: Rule): Boolean{
+        return when (r.n){
+            0 -> {
+                when (Game.current.Coins){
+                    0 -> { false }
+                    else -> {
+                        Game.current.Coins--
+                        coins++
+                        used = true
+                        true
+                    }
+                }
+            }
+            1 -> {
+                Game.current.Coins += coins
+                coins = 0
+                used = true
+                true
+            }
+            else -> { false }
+        }
+    }
+
 }
 
 class Baziteo: Card(house.Hufflepuff, 6, "Baziteo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        Game.current.apply {
+            Coins++
+            Hearts++
+            Hand.cards.addAll(DrawPile.draw(1))
+        }
+        if(Game.current.House == this.house || Game.current.hasAllyWithHouse(this.house)){
+            Game.current.apply {
+                Attacks += 2
+            }
+        }
+        super.play()
+        return null
     }
 }
 
-class Bimba_Professzor: Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Companion){
-    override fun play() {
-
+class Bimba_Professzor: Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Ally){
+    override fun play(): Rule? {
+        super.play()
+        return null
     }
 }
 
 class Bombarda: Card(house.None, 2, "Bombarda", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        super.play()
+        return null
     }
 }
 
 class Boszorkanyfukivonat: Card(house.None, 6, "Boszorkányfűkivonat", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Buvos_bizsere: Card(house.None, 7, "Bűvös bizsere", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Capitulatus: Card(house.Gryffindor, 4, "Capitulatus", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Carbunculus: Card(house.None, 0, "Carbunculus", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Cave_malcium: Card(house.None, 6, "Cave malcium", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Cedric_Diggory: Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Companion){
-    override fun play() {
-
+class Cedric_Diggory: Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Cho_Chang: Card(house.Ravenclaw, 6, "Cho Chang", Type.Companion){
-    override fun play() {
-
+class Cho_Chang: Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Confundo: Card(house.None, 7, "Confundo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Confundo_curse: Card(house.None, 0, "Confundo_curse", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Conjuctivitis: Card(house.None, 0, "Conjuctivitis", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Crucio: Card(house.None, 8, "Crucio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Csalanartas: Card(house.None, 0, "Csalánártás", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Cukrozott_lepkeszarnyak: Card(house.Gryffindor, 4, "Cukrozott lepkeszárnyak", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Csokibeka: Card(house.Gryffindor, 3, "Csokibéka", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Densaugeo: Card(house.Slytherin, 5, "Densaugeo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Descendo: Card(house.Gryffindor, 5, "Descendo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Diffindo: Card(house.Hufflepuff, 5, "Diffindo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Disaudio: Card(house.None, 7, "Disaudio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Dobby: Card(house.None, 4, "Dobby a házimanó", Type.Companion){
-    override fun play() {
-
+class Dobby: Card(house.None, 4, "Dobby a házimanó", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Draco_Malfoy: Card(house.Slytherin, 6, "Draco Malfoy", Type.Companion){
-    override fun play() {
-
+class Draco_Malfoy: Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Egyel_csigat: Card(house.None, 0, "Egyél csigát", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Exmamoriam: Card(house.Ravenclaw, 5, "Exmamoriam", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Expecto_patronum: Card(house.None, 5, "Expecto patronum", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Felix_Felicis: Card(house.None, 5, "Felix Felicis", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Flipendo: Card(house.None, 8, "Flipendo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Flitwick_Professzor: Card(house.Ravenclaw, 7, "Flitwick Professzor", Type.Companion){
-    override fun play() {
-
+class Flitwick_Professzor: Card(house.Ravenclaw, 7, "Flitwick Professzor", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Fozetkeszlet: Card(house.None, 5, "Főzetkészlet", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Gancsrontas: Card(house.None, 0, "Gáncsrontás", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Geminio: Card(house.None, 0, "Geminio", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Gildroy_Lockhart: Card(house.Ravenclaw, 5, "Gildroy Lockhart", Type.Companion){
-    override fun play() {
-
+class Gildroy_Lockhart: Card(house.Ravenclaw, 5, "Gildroy Lockhart", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
-class Ginny_Weasley: Card(house.None, 4, "Ginny Weasley", Type.Companion){
-    override fun play() {
-
+class Ginny_Weasley: Card(house.None, 4, "Ginny Weasley", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
-class Gregory_Monstro: Card(house.Slytherin, 6, "Gregory Monstro", Type.Companion){
-    override fun play() {
-
+class Gregory_Monstro: Card(house.Slytherin, 6, "Gregory Monstro", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 class Gumilabrontas: Card(house.None, 0, "Gumilábrontás", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Harry_Potter: Card(house.Gryffindor, 6, "Harry Potter", Type.Companion){
-    override fun play() {
-
+class Harry_Potter: Card(house.Gryffindor, 6, "Harry Potter", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Hermione_Granger: Card(house.Gryffindor, 6, "Hermione Granger", Type.Companion){
-    override fun play() {
-
+class Hermione_Granger: Card(house.Gryffindor, 6, "Hermione Granger", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Imperio: Card(house.Slytherin, 4, "Imperio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Invito: Card(house.None, 3, "Invito", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Konyv: Card(house.None, 3, "Könyv", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Koromnovelo_rontas: Card(house.None, 0, "Körömnövelő rontás", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Kritalygomb: Card(house.Ravenclaw, 3, "Kritálygömb", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Levicorpus: Card(house.None, 0, "Levicorpus", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Locomotor: Card(house.Ravenclaw, 6, "Locomotor", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Lumos: Card(house.None, 6, "Lumos", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Luna_Lovegood: Card(house.Ravenclaw, 6, "Luna Lovegood", Type.Companion){
-    override fun play() {
-
+class Luna_Lovegood: Card(house.Ravenclaw, 6, "Luna Lovegood", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Macska: Card(house.None, 0, "Macska", Type.Companion){
-    override fun play() {
-
+class Macska: Card(house.None, 0, "Macska", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Magifi_ragasztoszalag: Card(house.Ravenclaw, 4, "Magifix ragasztószalag", Type.Item){
-    override fun play() {
-
+class Magifix_ragasztoszalag: Card(house.Ravenclaw, 4, "Magifix ragasztószalag", Type.Item){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Mandragora: Card(house.Hufflepuff, 4, "Mandragóra", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
-class Mcgalacony_Professzor: Card(house.Gryffindor, 7, "McGalacony Professzor", Type.Companion){
-    override fun play() {
-
+class Mcgalacony_Professzor: Card(house.Gryffindor, 7, "McGalacony Professzor", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
-class Neville_Longbottom: Card(house.None, 4, "Neville Longbottom", Type.Companion){
-    override fun play() {
-
+class Neville_Longbottom: Card(house.None, 4, "Neville Longbottom", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Nymphadora_Tonks: Card(house.Hufflepuff, 6, "Nymphadora Tonks", Type.Companion){
-    override fun play() {
-
+class Nymphadora_Tonks: Card(house.Hufflepuff, 6, "Nymphadora Tonks", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 class Obstructo: Card(house.None, 7, "Obstructo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Oppugno: Card(house.None, 5, "Oppugno", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Palca: Card(house.None, 0, "Pálca", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Penna: Card(house.Hufflepuff, 3, "Penna", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Perselus_Piton: Card(house.Slytherin, 7, "Perselus Piton", Type.Companion){
-    override fun play() {
-
+class Perselus_Piton: Card(house.Slytherin, 7, "Perselus Piton", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Perui_instant_sotetsegpor: Card(house.Slytherin, 4, "Perui instant sötétségpor", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Petrificus_totalus: Card(house.None, 2, "Petrificus totalus", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Pirocus: Card(house.None, 4, "Pirocus", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Piroinitio: Card(house.None, 4, "Piroinitio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Priori_incantatem: Card(house.None, 4, "Priori incantatem", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Profix: Card(house.None, 6, "Profix", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Protego: Card(house.None, 4, "Protego", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Purlicerpenna: Card(house.None, 3, "Purlicerpenna", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Relaxo: Card(house.Slytherin, 6, "Relaxo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Remdenever_rontas: Card(house.None, 0, "Rémdenevér rontás", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Remszem_Mordon: Card(house.None, 5, "Rémszem Mordon", Type.Companion){
-    override fun play() {
-
+class Remszem_Mordon: Card(house.None, 5, "Rémszem Mordon", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Remus_Lupin: Card(house.None, 7, "Remus Lupin", Type.Companion){
-    override fun play() {
-
+class Remus_Lupin: Card(house.None, 7, "Remus Lupin", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 class Reparo: Card(house.None, 3, "Reparo", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 class Revelio: Card(house.None, 2, "Revelio", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Rictusempra: Card(house.None, 2, "Rictusempra", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Ron_Weasley: Card(house.Gryffindor, 5, "Ron Weasley", Type.Companion){
-    override fun play() {
-
+class Ron_Weasley: Card(house.Gryffindor, 5, "Ron Weasley", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Rubeus_Hagrid: Card(house.None, 5, "Rubeus Hagrid", Type.Companion){
-    override fun play() {
-
+class Rubeus_Hagrid: Card(house.None, 5, "Rubeus Hagrid", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Sectumsempra: Card(house.None, 0, "Sectumsempra", Type.Curse){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Sonorus: Card(house.Hufflepuff, 4, "Sonorus", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Stupor: Card(house.Gryffindor, 6, "Stupor", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Suvickus: Card(house.None, 4, "Suvickus", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Szazfule_fozet: Card(house.Slytherin, 3, "Százfűlé főzet", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Tarantallegra: Card(house.None, 8, "Tarantallegra", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Vajsor: Card(house.None, 2, "Vajsör", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Ust: Card(house.None, 0, "Üst", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Varangy: Card(house.None, 0, "Varangy", Type.Companion){
-    override fun play() {
-
+class Varangy: Card(house.None, 0, "Varangy", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Vincent_Crack: Card(house.Slytherin, 5, "Vincent Crack", Type.Companion){
-    override fun play() {
-
+class Vincent_Crack: Card(house.Slytherin, 5, "Vincent Crack", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Vingardium_leviosa: Card(house.Ravenclaw, 4, "Vingardium leviosa", Type.Spell){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-class Zacharias_Smith: Card(house.Hufflepuff, 5, "Zacharias Smith", Type.Companion){
-    override fun play() {
-
+class Zacharias_Smith: Card(house.Hufflepuff, 5, "Zacharias Smith", Type.Ally){
+    override fun play(): Rule? {
+        return null
     }
 }
 
 class Zsugoritott_fej: Card(house.None, 8, "Zsugorított fej", Type.Item){
-    override fun play() {
-
+    override fun play(): Rule? {
+        return null
     }
 }
 
-enum class Type{
-    Item,
-    Spell,
-    Companion,
-    Curse
-}

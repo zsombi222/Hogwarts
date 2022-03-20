@@ -1,20 +1,43 @@
-class Deck {
+class Deck(val dtype: decktype) {
     var cards: MutableList<Card> = mutableListOf()
 
-    constructor(dtype: decktype, companion: Card) {
+    fun shuffle(){
+        cards.shuffle()
+    }
+
+    fun draw(n: Int): (List<Card>) {
+        val list = mutableListOf<Card>()
+        for (i in 0 until n){
+            if(cards.size > 0)
+                list.add(cards.removeAt(0))
+            else{
+                Events.drawPileEmptyEvent()
+                break
+            }
+        }
+        return list
+    }
+
+    init {
         when (dtype) {
-            decktype.Starter -> {
+            decktype.StarterCat ->{
                 invoke<Alohomora>(7)
                 invoke<Ust>(1)
                 invoke<Palca>(1)
-                cards.add(companion)
+                invoke<Macska>(1)
             }
-            else -> return
-        }
-    }
-
-    constructor(dtype: decktype) {
-        when (dtype) {
+            decktype.StarterFrog ->{
+                invoke<Alohomora>(7)
+                invoke<Ust>(1)
+                invoke<Palca>(1)
+                invoke<Varangy>(1)
+            }
+            decktype.StarterOwl ->{
+                invoke<Alohomora>(7)
+                invoke<Ust>(1)
+                invoke<Palca>(1)
+                invoke<Bagoly>(1)
+            }
             decktype.Books -> {
                 invoke<Konyv>(8)
             }
@@ -75,7 +98,7 @@ class Deck {
                 invoke<Locomotor>(2)
                 invoke<Lumos>(1)
                 invoke<Luna_Lovegood>(1)
-                invoke<Magifi_ragasztoszalag>(2)
+                invoke<Magifix_ragasztoszalag>(2)
                 invoke<Mandragora>(2)
                 invoke<Mcgalacony_Professzor>(1)
                 invoke<Neville_Longbottom>(1)
@@ -111,8 +134,7 @@ class Deck {
                 invoke<Zacharias_Smith>(1)
                 invoke<Zsugoritott_fej>(1)
             }
-            decktype.Empty -> return
-            else -> return
+            decktype.Empty -> {}
         }
     }
 
@@ -124,7 +146,9 @@ class Deck {
 }
 
 enum class decktype{
-    Starter,
+    StarterCat,
+    StarterFrog,
+    StarterOwl,
     Classroom,
     Books,
     Curses,
