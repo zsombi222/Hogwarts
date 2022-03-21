@@ -1,3 +1,5 @@
+import java.lang.Exception
+
 class Deck(val dtype: decktype) {
     var cards: MutableList<Card> = mutableListOf()
 
@@ -16,6 +18,15 @@ class Deck(val dtype: decktype) {
             }
         }
         return list
+    }
+
+    fun drawIdx(n: Int): Card{
+        return try {
+            cards.removeAt(n)
+        }
+        catch (e: Exception){
+            throw Exception("out of index")
+        }
     }
 
     init {

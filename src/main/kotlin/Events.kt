@@ -1,5 +1,18 @@
 
 object Events {
+
+
+    var newAllyToTop = false
+    var newAllyToTopN = 0
+    var newItemToTop = false
+    var newItemToTopN = 0
+    var newSpellToTop = false
+    var newSpellToTopN = 0
+
+    var carbunculus = false
+    var carbunculusN = 0
+
+
     val coinEvents = hashMapOf<Card, () -> Unit>()
     fun coinEvent(){
         for (event in coinEvents){
@@ -31,6 +44,13 @@ object Events {
     val spellDroppedEvents = hashMapOf<Card, () -> Unit>()
     fun spellDroppedEvent() {
         for (event in spellDroppedEvents){
+            event.value()
+        }
+    }
+
+    val cursePlayedEvents = hashMapOf<Card, () -> Unit>()
+    fun cursePlayedEvent() {
+        for (event in cursePlayedEvents){
             event.value()
         }
     }

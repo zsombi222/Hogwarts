@@ -18,6 +18,7 @@ class Game(comp: Boolean){
         lateinit var Curses: Deck
         lateinit var Books: Deck
         lateinit var Destructed: Deck
+        lateinit var ClassRoom4: Deck
         var current: Player = Human()
         var opponent: Player = Human()
     }
@@ -28,6 +29,8 @@ class Game(comp: Boolean){
         Curses = Deck(decktype.Curses)
         Books = Deck(decktype.Books)
         Destructed = Deck(decktype.Empty)
+        ClassRoom4 = Deck(decktype.Empty)
+
         current = Human()
         opponent = Human()
 
@@ -52,9 +55,18 @@ class Game(comp: Boolean){
 
         ////////// TEST SECTION
 
+
+
         current = p1
         opponent = p2
 
+
+        /*
+        while(true){
+
+        }
+        */
+        
         p1.creasteStarterPile(decktype.StarterCat)
         p1.DrawPile.shuffle()
         //p1.Hand.cards.addAll(p1.DrawPile.draw(3))
@@ -91,9 +103,8 @@ class Game(comp: Boolean){
         println(p1)
 
         var ru = p1.Hand.cards[0].play()
-        ru?.n = 0
         if (ru?.req != null) {
-            ru.req(ru)
+            ru.req(Response(0))
         }
 
         println(p1)
@@ -113,9 +124,8 @@ class Game(comp: Boolean){
         println(p1)
 
         ru = p1.Allies.cards[1].use()
-        ru?.n = 0
         if (ru?.req != null) {
-            ru.req(ru)
+            ru.req(Response(0))
         }
 
         println(p1)
