@@ -66,7 +66,7 @@ class Game(comp: Boolean){
 
         }
         */
-        
+
         p1.creasteStarterPile(decktype.StarterCat)
         p1.DrawPile.shuffle()
         //p1.Hand.cards.addAll(p1.DrawPile.draw(3))
