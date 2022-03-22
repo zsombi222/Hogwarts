@@ -29,6 +29,17 @@ class Deck(val dtype: decktype) {
         }
     }
 
+    override fun toString(): String {
+        var s = ""
+        for(i in 0 until cards.size){
+            s += "\t$i. ${cards[i]}"
+            if (i < cards.size-1){
+                s+="\n"
+            }
+        }
+        return s
+    }
+
     init {
         when (dtype) {
             decktype.StarterCat ->{
@@ -79,7 +90,7 @@ class Deck(val dtype: decktype) {
                 invoke<Boszorkanyfukivonat>(1)
                 invoke<Buvos_bizsere>(1)
                 invoke<Capitulatus>(3)
-                invoke<Cave_malcium>(2)
+                invoke<Cave_malicium>(2)
                 invoke<Cedric_Diggory>(1)
                 invoke<Cho_Chang>(1)
                 invoke<Confundo>(1)

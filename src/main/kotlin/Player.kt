@@ -28,10 +28,18 @@ abstract class Player(open val name: String, open val House: house) {
     override fun toString(): String {
         return """
 $name: ($House)
-Hand: ${Hand.cards}
-Allies: ${Allies.cards}
-HP: $Health
-Stuns: $Stuns
+Kézben: 
+${Hand}
+Kijátszott: 
+${Played}
+Szövetségesek: 
+${Allies}
+Húzópakli: 
+${DrawPile}
+Dobópakli: 
+${DiscardPile}
+Élet: $Health
+Pont: $Stuns
 <3 : $Hearts
 *  : $Attacks
 ¤  : $Coins

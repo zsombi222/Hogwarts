@@ -1,3 +1,7 @@
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.lang.NumberFormatException
+import java.lang.module.ModuleDescriptor.read
 import kotlin.random.Random
 
 fun main(args: Array<String>) {
@@ -9,8 +13,8 @@ fun main(args: Array<String>) {
 
 class Game(comp: Boolean){
 
-    var p1: Player
-    var p2: Player
+    lateinit var p1: Player
+    lateinit var p2: Player
 
     companion object{
 
@@ -60,13 +64,55 @@ class Game(comp: Boolean){
         current = p1
         opponent = p2
 
+        val reader = BufferedReader(InputStreamReader(System.`in`))
 
-        /*
         while(true){
+            reader.lineSequence().forEach {
+                //println("a sor: "+it)
+                val cmd = it.split(' ')
+                when (cmd[0]){
+                    "test"->{
+                        Tests.run(cmd[1].toInt())
+                    }
+                    "add"->{
+                        try {
+                            val idx = cmd[1].toInt()
+                            var n = 1
+                            if(cmd.size > 2)
+                                n = cmd[2].toInt()
+                            Tests.add(idx,n)
+                        } catch (e: NumberFormatException){
+                            var n = 1
+                            if(cmd.size > 2)
+                                n = cmd[2].toInt()
+                            Tests.add(cmd[1],n)
+                        }
+                    }
+                    "print" ->{
+                        Tests.print()
+                    }
+                    "turn" ->{
+                        Tests.turn()
+                    }
+                    "play" ->{
+                        Game.current.Hand.cards[cmd[1].toInt()].play()
+                    }
+                    else ->{
+                        println("Ismeretlen parancs")
+                    }
+                }
+            }
 
         }
-        */
 
+
+
+/*
+
+        """
+add macska 1
+add bagoly 1
+        """
         p1.creasteStarterPile(decktype.StarterCat)
         p1.DrawPile.shuffle()
         //p1.Hand.cards.addAll(p1.DrawPile.draw(3))
@@ -136,7 +182,9 @@ class Game(comp: Boolean){
 
 
         ///////// END OF TEST SECTION
+        */
     }
+
 
     fun start(){
         while(p1.Stuns > 0 && p2.Stuns > 0){

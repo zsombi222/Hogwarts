@@ -25,7 +25,7 @@ abstract class Card(val house: house,val value: Int, val name: String, val type:
 
 }
 
-class Aguamenti: Card(house.None, 3, "aguamenti", Type.Spell){
+class Aguamenti: Card(house.None, 3, "Aguamenti", Type.Spell){
     override fun play(): Request? {
         Game.current.apply{
             Coins += 2
@@ -351,7 +351,7 @@ class Carbunculus: Card(house.None, 0, "Carbunculus", Type.Curse){
     }
 }
 
-class Cave_malcium: Card(house.None, 6, "Cave malcium", Type.Spell){
+class Cave_malicium: Card(house.None, 6, "Cave malicium", Type.Spell){
     override fun play(): Request? {
         Events.spellPlayedEvent()
         super.play()
