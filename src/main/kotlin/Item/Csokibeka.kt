@@ -7,7 +7,7 @@ import Request
 import Type
 import house
 
-class Csokibeka: Card(house.Gryffindor, 3, "Csokibéka", Type.Item){
+class Csokibeka : Card(house.Gryffindor, 3, "Csokibéka", Type.Item) {
     override fun play(): Request? {
         Game.current.apply {
             Coins += 2

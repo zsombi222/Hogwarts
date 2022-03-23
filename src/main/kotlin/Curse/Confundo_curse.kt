@@ -6,7 +6,7 @@ import Request
 import Type
 import house
 
-class Confundo_curse: Card(house.None, 0, "Confundo_curse", Type.Curse){
+class Confundo_curse : Card(house.None, 0, "Confundo_curse", Type.Curse) {
     override fun play(): Request? {
         Events.confundoCurse = true
         Events.confundoCurseN++
@@ -17,7 +17,7 @@ class Confundo_curse: Card(house.None, 0, "Confundo_curse", Type.Curse){
 
     override fun discard() {
         Events.confundoCurseN--
-        if(Events.confundoCurseN == 0) {
+        if (Events.confundoCurseN == 0) {
             Events.confundoCurse = false
         }
         super.discard()

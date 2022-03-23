@@ -7,9 +7,9 @@ import Request
 import Type
 import house
 
-class Aguamenti: Card(house.None, 3, "Aguamenti", Type.Spell){
+class Aguamenti : Card(house.None, 3, "Aguamenti", Type.Spell) {
     override fun play(): Request? {
-        Game.current.apply{
+        Game.current.apply {
             Coins += 2
             Hearts++
         }

@@ -5,21 +5,20 @@ import Curse.Conjuctivitis
 import Curse.Csalanartas
 import Item.*
 import Spell.*
-import java.lang.Exception
 
 class Deck(val dtype: decktype) {
     var cards: MutableList<Card> = mutableListOf()
 
-    fun shuffle(){
+    fun shuffle() {
         cards.shuffle()
     }
 
     fun draw(n: Int): (List<Card>) {
         val list = mutableListOf<Card>()
-        for (i in 0 until n){
-            if(cards.size > 0)
+        for (i in 0 until n) {
+            if (cards.size > 0)
                 list.add(cards.removeAt(0))
-            else{
+            else {
                 Events.drawPileEmptyEvent()
                 break
             }
@@ -31,19 +30,18 @@ class Deck(val dtype: decktype) {
         return draw(cards.size)
     }
 
-    fun drawIdx(n: Int): Card{
+    fun drawIdx(n: Int): Card {
         return try {
             cards.removeAt(n)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             throw Exception("out of index")
         }
     }
 
-    fun getCurseNum(): Int{
+    fun getCurseNum(): Int {
         var db = 0
-        cards.forEach(){
-            if (it.type == Type.Curse){
+        cards.forEach() {
+            if (it.type == Type.Curse) {
                 db++
             }
         }
@@ -52,10 +50,10 @@ class Deck(val dtype: decktype) {
 
     override fun toString(): String {
         var s = ""
-        for(i in 0 until cards.size){
+        for (i in 0 until cards.size) {
             s += "\t$i. ${cards[i]}"
-            if (i < cards.size-1){
-                s+="\n"
+            if (i < cards.size - 1) {
+                s += "\n"
             }
         }
         return s
@@ -63,19 +61,19 @@ class Deck(val dtype: decktype) {
 
     init {
         when (dtype) {
-            decktype.StarterCat ->{
+            decktype.StarterCat -> {
                 invoke<Alohomora>(7)
                 invoke<Ust>(1)
                 invoke<Palca>(1)
                 invoke<Macska>(1)
             }
-            decktype.StarterFrog ->{
+            decktype.StarterFrog -> {
                 invoke<Alohomora>(7)
                 invoke<Ust>(1)
                 invoke<Palca>(1)
                 invoke<Varangy>(1)
             }
-            decktype.StarterOwl ->{
+            decktype.StarterOwl -> {
                 invoke<Alohomora>(7)
                 invoke<Ust>(1)
                 invoke<Palca>(1)
@@ -177,7 +175,8 @@ class Deck(val dtype: decktype) {
                 invoke<Zacharias_Smith>(1)
                 invoke<Zsugoritott_fej>(1)
             }
-            decktype.Empty -> {}
+            decktype.Empty -> {
+            }
         }
     }
 
@@ -188,7 +187,7 @@ class Deck(val dtype: decktype) {
     }
 }
 
-enum class decktype{
+enum class decktype {
     StarterCat,
     StarterFrog,
     StarterOwl,

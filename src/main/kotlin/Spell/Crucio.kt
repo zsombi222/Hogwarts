@@ -1,12 +1,13 @@
 package Spell
 
 import Card
+import Events
 import Game
 import Request
 import Type
 import house
 
-class Crucio: Card(house.None, 8, "Crucio", Type.Spell){
+class Crucio : Card(house.None, 8, "Crucio", Type.Spell) {
     override fun play(): Request? {
         Game.opponent.apply {
             DiscardPile.cards.addAll(Game.Curses.draw(1))

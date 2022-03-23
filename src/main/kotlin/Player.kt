@@ -12,13 +12,13 @@ abstract class Player(open val name: String, open val House: house) {
     var Attacks = 0;
     var Coins = 0;
 
-    fun creasteStarterPile(dtype: decktype){
+    fun creasteStarterPile(dtype: decktype) {
         DrawPile = Deck(dtype)
     }
 
-    fun hasAllyWithHouse(h: house): Boolean{
-        for (c in Allies.cards){
-            if (c.House == h){
+    fun hasAllyWithHouse(h: house): Boolean {
+        for (c in Allies.cards) {
+            if (c.House == h) {
                 return true
             }
         }
@@ -48,13 +48,14 @@ Pont: $Stuns
     }
 }
 
-data class Human(override val name: String = "human", override val House: house = house.None): Player(name, House) {
+data class Human(override val name: String = "human", override val House: house = house.None) : Player(name, House) {
     override fun toString(): String {
         return super.toString()
     }
 }
 
-data class Computer(override val name: String = "computer", override val House: house = house.None): Player(name, House) {
+data class Computer(override val name: String = "computer", override val House: house = house.None) :
+    Player(name, House) {
     override fun toString(): String {
         return super.toString()
     }

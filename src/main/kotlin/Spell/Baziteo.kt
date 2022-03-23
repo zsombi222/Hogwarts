@@ -7,14 +7,14 @@ import Request
 import Type
 import house
 
-class Baziteo: Card(house.Hufflepuff, 6, "Baziteo", Type.Spell){
+class Baziteo : Card(house.Hufflepuff, 6, "Baziteo", Type.Spell) {
     override fun play(): Request? {
         Game.current.apply {
             Coins++
             Hearts++
             Hand.cards.addAll(DrawPile.draw(1))
         }
-        if(Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)){
+        if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
             Game.current.apply {
                 Attacks += 2
             }

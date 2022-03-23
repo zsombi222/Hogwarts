@@ -8,7 +8,7 @@ import Response
 import Type
 import house
 
-class Altatoital: Card(house.None, 7, "Altatóital", Type.Item){
+class Altatoital : Card(house.None, 7, "Altatóital", Type.Item) {
     override fun play(): Request? {
         Game.current.apply {
             Attacks += 2
@@ -19,8 +19,8 @@ class Altatoital: Card(house.None, 7, "Altatóital", Type.Item){
         return r
     }
 
-    fun discardAlly(r: Response): Boolean{
-        try{
+    fun discardAlly(r: Response): Boolean {
+        try {
             Game.opponent.Allies.cards[r.n].discard()
             return true
         } catch (e: Exception) {

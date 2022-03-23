@@ -6,7 +6,7 @@ import Request
 import Type
 import house
 
-class Csalanartas: Card(house.None, 0, "Csalánártás", Type.Curse){
+class Csalanartas : Card(house.None, 0, "Csalánártás", Type.Curse) {
     override fun play(): Request? {
         Events.csalanN++
         Events.csalan = true
@@ -17,7 +17,7 @@ class Csalanartas: Card(house.None, 0, "Csalánártás", Type.Curse){
 
     override fun discard() {
         Events.csalanN--
-        if(Events.csalanN == 0) {
+        if (Events.csalanN == 0) {
             Events.csalan = false
         }
         super.discard()

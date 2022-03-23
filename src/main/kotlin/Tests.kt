@@ -7,11 +7,11 @@ import Item.*
 import Spell.*
 
 class Tests {
-    companion object{
-        fun run(n: Int){
+    companion object {
+        fun run(n: Int) {
             println("Teszt $n futtatása...")
             when (n) {
-                0 ->{
+                0 -> {
                     Tests.add("alohomora", 7)
                     add("macska")
                     add("ust")
@@ -26,7 +26,7 @@ class Tests {
             }
         }
 
-        fun add(card: String, n: Int = 1){
+        fun add(card: String, n: Int = 1) {
             val c = mutableListOf<Card>()
 
             try {
@@ -41,21 +41,21 @@ class Tests {
             Game.current.Hand.cards.addAll(c)
         }
 
-        fun add(idx: Int, n: Int = 1){
+        fun add(idx: Int, n: Int = 1) {
             val c = mutableListOf<Card>()
-            try{
+            try {
                 val ca = ctrs[idx].getDeclaredConstructor().newInstance()
-                repeat(n){
+                repeat(n) {
                     c.add(ca)
                 }
                 println("${Game.current.name} kapott $n ${ca.name} lapot")
-            }catch(e: Exception){
+            } catch (e: Exception) {
                 println("Nincs ilyen lap")
             }
             Game.current.Hand.cards.addAll(c)
         }
 
-        fun turn(){
+        fun turn() {
             val temp = Game.current
             Game.current = Game.opponent
             Game.opponent = temp
@@ -65,7 +65,7 @@ class Tests {
             Events.roundEndedEvent()
         }
 
-        fun print(){
+        fun print() {
             println("_____________________")
             println("__Jelenlegi játékos__")
             print(Game.current)
@@ -171,7 +171,8 @@ class Tests {
             "palca",
             "bagoly",
             "varangy",
-            "macska")
+            "macska"
+        )
 
         val d = Deck(decktype.Empty)
         val ctrs = mutableListOf(
@@ -270,11 +271,9 @@ class Tests {
             Palca::class.java,
             Bagoly::class.java,
             Varangy::class.java,
-            Macska::class.java)
+            Macska::class.java
+        )
     }
-
-
-
 
 
 }

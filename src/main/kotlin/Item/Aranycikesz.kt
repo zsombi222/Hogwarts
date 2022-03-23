@@ -7,7 +7,7 @@ import Request
 import Type
 import house
 
-class Aranycikesz: Card(house.None, 8, "Aranycikesz", Type.Item){
+class Aranycikesz : Card(house.None, 8, "Aranycikesz", Type.Item) {
     override fun play(): Request? {
         Game.current.apply {
             if (Allies.cards.size >= 2) {

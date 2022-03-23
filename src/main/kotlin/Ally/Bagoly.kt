@@ -9,7 +9,7 @@ import Response
 import Type
 import house
 
-class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
+class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
     var coins = 0
     var used = false
     var player: Player? = null
@@ -23,7 +23,7 @@ class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
     }
 
     override fun use(): Request? {
-        if(!used && Game.current == player) {
+        if (!used && Game.current == player) {
             return Request(::chooseFunction, "0 - rakj félre egy érmét\n1 - vedd el az összeset")
         }
         return null
@@ -31,25 +31,33 @@ class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
 
     override fun discard() {
         coins = 0
-        Events.roundEndedEvents.remove(this)
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
         super.discard()
     }
 
     override fun destroy() {
         coins = 0
-        Events.roundEndedEvents.remove(this)
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
         super.destroy()
     }
 
-    fun reset(){
+    fun reset() {
         used = false
     }
 
-    fun chooseFunction(r: Response): Boolean{
-        return when (r.n){
+    fun chooseFunction(r: Response): Boolean {
+        return when (r.n) {
             0 -> {
-                when (Game.current.Coins){
-                    0 -> { false }
+                when (Game.current.Coins) {
+                    0 -> {
+                        false
+                    }
                     else -> {
                         Game.current.Coins--
                         coins++
@@ -64,7 +72,9 @@ class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
                 used = true
                 true
             }
-            else -> { false }
+            else -> {
+                false
+            }
         }
     }
 

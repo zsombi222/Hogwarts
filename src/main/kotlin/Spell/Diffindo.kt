@@ -8,10 +8,13 @@ import Response
 import Type
 import house
 
-class Cave_malicium : Card(house.None, 6, "Cave malicium", Type.Spell) {
+class Diffindo : Card(house.Hufflepuff, 5, "Diffindo", Type.Spell) {
     override fun play(): Request? {
         Game.current.apply {
-            Hearts += 2
+            if (House == this.House) {
+                Coins++
+                Hearts++
+            }
         }
         Events.spellPlayedEvent()
         super.play()

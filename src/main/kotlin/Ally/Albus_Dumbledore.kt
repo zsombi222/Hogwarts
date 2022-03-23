@@ -8,7 +8,7 @@ import Request
 import Type
 import house
 
-class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Ally){
+class Albus_Dumbledore : Card(house.None, 9, "Albus Dumbledore", Type.Ally) {
     var used = false
     var player: Player? = null
     override fun play(): Request? {
@@ -22,19 +22,25 @@ class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Ally){
     }
 
     override fun discard() {
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
         super.discard()
-        Events.roundEndedEvents.remove(this)
     }
 
     override fun destroy() {
-        Events.roundEndedEvents.remove(this)
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
         super.destroy()
     }
 
     override fun use(): Request? {
-        if(!used && Game.current == player){
+        if (!used && Game.current == player) {
             used = true
-            Game.current.apply{
+            Game.current.apply {
                 Attacks++
                 Coins++
                 Hearts++
@@ -44,7 +50,7 @@ class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Ally){
         return null
     }
 
-    fun reset(){
+    fun reset() {
         used = false
     }
 

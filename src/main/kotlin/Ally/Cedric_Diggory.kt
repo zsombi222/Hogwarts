@@ -8,7 +8,7 @@ import Request
 import Type
 import house
 
-class Cedric_Diggory: Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally){
+class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
     var used = false
     var player: Player? = null
     override fun play(): Request? {
@@ -22,34 +22,36 @@ class Cedric_Diggory: Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally){
     }
 
     override fun discard() {
-        Events.roundEndedEvents.remove(this)
-        Events.healthIncreased.remove(this)
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        try {
+            Events.healthIncreased.remove(this)
+        } catch (e: Exception) {
+        }
         super.discard()
     }
 
     override fun destroy() {
-        Events.roundEndedEvents.remove(this)
-        Events.healthIncreased.remove(this)
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        try {
+            Events.healthIncreased.remove(this)
+        } catch (e: Exception) {
+        }
+
         super.destroy()
     }
 
-    override fun use(): Request? {
-        if(!used && Game.current == player){
-            used = true
-            Game.current.apply{
-                Coins++
-                Hearts += 2
-            }
-        }
-        return null
-    }
-
-    fun reset(){
+    fun reset() {
         used = false
     }
 
-    fun skill(){
-        if(!used && Game.current == player){
+    fun skill() {
+        if (!used && Game.current == player) {
             used = true
             Game.current.apply {
                 Attacks++

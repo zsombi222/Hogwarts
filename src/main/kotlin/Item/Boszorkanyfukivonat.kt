@@ -7,7 +7,7 @@ import Request
 import Type
 import house
 
-class Boszorkanyfukivonat: Card(house.None, 6, "Boszorkányfűkivonat", Type.Item){
+class Boszorkanyfukivonat : Card(house.None, 6, "Boszorkányfűkivonat", Type.Item) {
     override fun play(): Request? {
         Game.current.apply {
             Coins++
@@ -22,7 +22,7 @@ class Boszorkanyfukivonat: Card(house.None, 6, "Boszorkányfűkivonat", Type.Ite
 
     override fun discard() {
         Events.newAllyToTopN--
-        if(Events.newAllyToTopN == 0) {
+        if (Events.newAllyToTopN == 0) {
             Events.newAllyToTop = false
         }
         super.discard()

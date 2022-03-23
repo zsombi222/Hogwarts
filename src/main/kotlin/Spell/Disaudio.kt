@@ -1,4 +1,4 @@
-package Item
+package Spell
 
 import Card
 import Events
@@ -7,14 +7,14 @@ import Request
 import Type
 import house
 
-class Buvos_bizsere : Card(house.None, 7, "Bűvös bizsere", Type.Item) {
+class Disaudio : Card(house.None, 7, "Disaudio", Type.Spell) {
     override fun play(): Request? {
         Game.current.apply {
-            Attacks += 2
+            Attacks++
             Hearts += 2
-            Hand.cards.addAll(DrawPile.draw(1))
         }
-        Events.itemPlayedEvent()
+        Game.opponent.DrawPile.cards.addAll(Game.Curses.draw(1))
+        Events.spellPlayedEvent()
         super.play()
         return null
     }
