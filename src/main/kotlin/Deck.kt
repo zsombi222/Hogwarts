@@ -1,3 +1,10 @@
+import Ally.*
+import Curse.Carbunculus
+import Curse.Confundo_curse
+import Curse.Conjuctivitis
+import Curse.Csalanartas
+import Item.*
+import Spell.*
 import java.lang.Exception
 
 class Deck(val dtype: decktype) {
@@ -20,6 +27,10 @@ class Deck(val dtype: decktype) {
         return list
     }
 
+    fun drawAll(): (List<Card>) {
+        return draw(cards.size)
+    }
+
     fun drawIdx(n: Int): Card{
         return try {
             cards.removeAt(n)
@@ -27,6 +38,16 @@ class Deck(val dtype: decktype) {
         catch (e: Exception){
             throw Exception("out of index")
         }
+    }
+
+    fun getCurseNum(): Int{
+        var db = 0
+        cards.forEach(){
+            if (it.type == Type.Curse){
+                db++
+            }
+        }
+        return db
     }
 
     override fun toString(): String {

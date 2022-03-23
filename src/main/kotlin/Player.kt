@@ -18,7 +18,7 @@ abstract class Player(open val name: String, open val House: house) {
 
     fun hasAllyWithHouse(h: house): Boolean{
         for (c in Allies.cards){
-            if (c.house == h){
+            if (c.House == h){
                 return true
             }
         }

@@ -1,5 +1,3 @@
-import kotlin.random.Random
-
 enum class Type{
     Item,
     Spell,
@@ -8,7 +6,7 @@ enum class Type{
 }
 
 
-abstract class Card(val house: house,val value: Int, val name: String, val type: Type) {
+abstract class Card(val House: house, val value: Int, val name: String, val type: Type) {
     open fun play(): Request? {
         Game.current.Hand.cards.remove(this)
         Game.current.Played.cards.add(this)
@@ -18,400 +16,38 @@ abstract class Card(val house: house,val value: Int, val name: String, val type:
         Game.current.Hand.cards.remove(this)
         Game.current.DiscardPile.cards.add(this)
     }
+    open fun discard() {
+        try {
+            Game.current.Played.cards.remove(this)
+        }
+        catch (e: Exception){
+            Game.current.Allies.cards.remove(this)
+        }
+        finally {
+            Game.current.DiscardPile.cards.add(this)
+        }
+    }
+    open fun destroy(){
+        try {
+            Game.current.Hand.cards.remove(this)
+        }catch (e: Exception){}
+        try {
+            Game.current.DiscardPile.cards.remove(this)
+        }catch (e: Exception){}
+        try {
+            Game.current.Played.cards.remove(this)
+        }catch (e: Exception){}
+        try {
+            Game.current.DrawPile.cards.remove(this)
+        }catch (e: Exception){}
+        try {
+            Game.current.Allies.cards.remove(this)
+        }catch (e: Exception){}
+        Game.Destructed.cards.add(this)
+    }
     open fun use(): Request? { return null }
     override fun toString(): String {
         return name
-    }
-
-}
-
-class Aguamenti: Card(house.None, 3, "Aguamenti", Type.Spell){
-    override fun play(): Request? {
-        Game.current.apply{
-            Coins += 2
-            Hearts++
-        }
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Albus_Dumbledore: Card(house.None, 9, "Albus Dumbledore", Type.Ally){
-    var used = false
-    var player: Player? = null
-    override fun play(): Request? {
-        player = Game.current
-        used = false
-        Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        return null
-    }
-
-    override fun drop() {
-        Events.roundEndedEvents.remove(this)
-    }
-
-    override fun use(): Request? {
-        if(!used && Game.current == player){
-            used = true
-            Game.current.apply{
-                Attacks++
-                Coins++
-                Hearts++
-                Hand.cards.addAll(DrawPile.draw(1))
-            }
-        }
-        return null
-    }
-
-    fun reset(){
-        used = false
-    }
-
-}
-
-class Alohomora: Card(house.None, 0, "Alohomora", Type.Spell){
-    override fun play(): Request? {
-        Game.current.Coins += 1
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Altatoital: Card(house.None, 7, "Altatóital", Type.Item){
-    override fun play(): Request? {
-        Game.current.apply {
-            Attacks += 2
-        }
-        super.play()
-        val r = Request(::discardAlly, "Válassz szövetségest: [0-${Game.opponent.Allies.cards.size-1}]")
-        Events.itemPlayedEvent()
-        return r
-    }
-
-    fun discardAlly(r: Response): Boolean{
-        try{
-            Game.opponent.DiscardPile.cards.add(Game.opponent.Allies.cards.removeAt(r.n))
-            return true
-        } catch (e: Exception) {
-            println("Nincs ilyen szövetséges")
-        }
-        return false
-    }
-}
-
-class Aranycikesz: Card(house.None, 8, "Aranycikesz", Type.Item){
-    override fun play(): Request? {
-        Game.current.apply {
-            if (Allies.cards.size >= 2) {
-                Coins += 3
-                Hand.cards.addAll(DrawPile.draw(2))
-            } else {
-                Attacks++
-                Hearts++
-            }
-        }
-        Events.itemPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Arresto_momentum: Card(house.None, 3, "Arresto momentum", Type.Spell){
-    override fun play(): Request? {
-        Game.current.apply {
-            Hearts++
-            Hand.cards.addAll(DrawPile.draw(1))
-        }
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-
-    override fun drop() {
-        Game.current.apply {
-            Hearts++
-        }
-        super.drop()
-    }
-}
-
-class Ascendio: Card(house.None, 4, "Ascendio", Type.Spell){
-    override fun play(): Request? {
-        Game.current.apply {
-            Coins += 2
-            Hand.cards.addAll(DrawPile.draw(1))
-        }
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Bagoly: Card(house.None, 0, "Bagoly", Type.Ally){
-    var coins = 0
-    var used = false
-    var player: Player? = null
-    override fun play(): Request? {
-        Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        player = Game.current
-        used = false
-        return null
-    }
-
-    override fun use(): Request? {
-        if(!used && Game.current == player) {
-            return Request(::chooseFunction, "0 - rakj félre egy érmét\n1 - vedd el az összeset")
-        }
-        return null
-    }
-
-    override fun drop() {
-        coins = 0
-        Events.roundEndedEvents.remove(this)
-        super.drop()
-    }
-
-    fun reset(){
-        used = false
-    }
-
-    fun chooseFunction(r: Response): Boolean{
-        return when (r.n){
-            0 -> {
-                when (Game.current.Coins){
-                    0 -> { false }
-                    else -> {
-                        Game.current.Coins--
-                        coins++
-                        used = true
-                        true
-                    }
-                }
-            }
-            1 -> {
-                Game.current.Coins += coins
-                coins = 0
-                used = true
-                true
-            }
-            else -> { false }
-        }
-    }
-
-}
-
-class Baziteo: Card(house.Hufflepuff, 6, "Baziteo", Type.Spell){
-    override fun play(): Request? {
-        Game.current.apply {
-            Coins++
-            Hearts++
-            Hand.cards.addAll(DrawPile.draw(1))
-        }
-        if(Game.current.House == this.house || Game.current.hasAllyWithHouse(this.house)){
-            Game.current.apply {
-                Attacks += 2
-            }
-        }
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Bimba_Professzor: Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Ally){
-    var used = false
-    var player: Player? = null
-    override fun play(): Request? {
-        player = Game.current
-        used = false
-        Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        return null
-    }
-
-    override fun drop() {
-        Events.roundEndedEvents.remove(this)
-    }
-
-    override fun use(): Request? {
-        if(!used && Game.current == player){
-            used = true
-            Game.current.apply{
-                Coins++
-                Hearts += 2
-            }
-        }
-        return null
-    }
-
-    fun reset(){
-        used = false
-    }
-}
-
-class Bombarda: Card(house.None, 2, "Bombarda", Type.Spell){
-    override fun play(): Request? {
-        Game.current.apply{
-            Attacks++
-        }
-        Events.spellPlayedEvent()
-        super.play()
-        return Request(::destroy, "Válassz egy elpusztítani kívánt lapot a tanteremből [0,1,2,3, ]:", 5)
-    }
-
-    fun destroy(r: Response): Boolean{
-        return try {
-            Game.Destructed.cards.add(Game.ClassRoom4.drawIdx(r.n))
-            true
-        } catch (e: Exception){
-            println("Nem lett kártya elpusztítva")
-            true
-        }
-    }
-}
-
-class Boszorkanyfukivonat: Card(house.None, 6, "Boszorkányfűkivonat", Type.Item){
-    override fun play(): Request? {
-        Game.current.apply {
-            Coins++
-            Hearts++
-        }
-        Events.newAllyToTopN++
-        Events.newAllyToTop = true
-        Events.itemPlayedEvent()
-        super.play()
-        return null
-    }
-
-    override fun drop() {
-        Events.newAllyToTopN--
-        if(Events.newAllyToTopN == 0) {
-            Events.newAllyToTop = false
-        }
-        super.drop()
-    }
-}
-
-class Buvos_bizsere: Card(house.None, 7, "Bűvös bizsere", Type.Item){
-    override fun play(): Request? {
-        Game.current.apply {
-            Attacks += 2
-            Hearts += 2
-            Hand.cards.addAll(DrawPile.draw(1))
-        }
-        Events.itemPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Capitulatus: Card(house.Gryffindor, 4, "Capitulatus", Type.Spell){
-    override fun play(): Request? {
-        Game.opponent.apply {
-            try {
-                DiscardPile.cards.add(Hand.drawIdx(Random.nextInt(0, Hand.cards.size+1)))
-            }catch (e: Exception) {
-                println("Nincs már kártya az ellenfél kezében")
-            }
-        }
-        if (Game.current.House == house) {
-            Game.current.apply {
-                Attacks++
-            }
-        }
-
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Carbunculus: Card(house.None, 0, "Carbunculus", Type.Curse){
-    override fun play(): Request? {
-        Events.carbunculusN++
-        Events.carbunculus = true
-        Events.cursePlayedEvent()
-        super.play()
-        return null
-    }
-
-    override fun drop() {
-        Events.carbunculusN--
-        if(Events.carbunculusN == 0) {
-            Events.carbunculus = false
-        }
-        super.drop()
-    }
-}
-
-class Cave_malicium: Card(house.None, 6, "Cave malicium", Type.Spell){
-    override fun play(): Request? {
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Cedric_Diggory: Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Cho_Chang: Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Confundo: Card(house.None, 7, "Confundo", Type.Spell){
-    override fun play(): Request? {
-        Events.spellPlayedEvent()
-        super.play()
-        return null
-    }
-}
-
-class Confundo_curse: Card(house.None, 0, "Confundo_curse", Type.Curse){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Conjuctivitis: Card(house.None, 0, "Conjuctivitis", Type.Curse){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Crucio: Card(house.None, 8, "Crucio", Type.Spell){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Csalanartas: Card(house.None, 0, "Csalánártás", Type.Curse){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Cukrozott_lepkeszarnyak: Card(house.Gryffindor, 4, "Cukrozott lepkeszárnyak", Type.Item){
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Csokibeka: Card(house.Gryffindor, 3, "Csokibéka", Type.Item){
-    override fun play(): Request? {
-        return null
     }
 }
 

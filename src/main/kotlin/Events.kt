@@ -12,6 +12,15 @@ object Events {
     var carbunculus = false
     var carbunculusN = 0
 
+    var confundoCurse = false
+    var confundoCurseN = 0
+
+    var conjuctivitis = false
+    var conjuctivitisN = 0
+
+    var csalan = false
+    var csalanN = 0
+
 
     val coinEvents = hashMapOf<Card, () -> Unit>()
     fun coinEvent(){
@@ -65,6 +74,13 @@ object Events {
     val drawPileEmpty = hashMapOf<Card, () -> Unit>()
     fun drawPileEmptyEvent(){
         for (event in drawPileEmpty){
+            event.value()
+        }
+    }
+
+    val healthIncreased = hashMapOf<Card, () -> Unit>()
+    fun healthIncreasedEvent(){
+        for (event in healthIncreased){
             event.value()
         }
     }

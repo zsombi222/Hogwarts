@@ -2,6 +2,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.lang.NumberFormatException
 import java.lang.module.ModuleDescriptor.read
+import java.util.*
 import kotlin.random.Random
 
 fun main(args: Array<String>) {
@@ -64,15 +65,19 @@ class Game(comp: Boolean){
         current = p1
         opponent = p2
 
-        val reader = BufferedReader(InputStreamReader(System.`in`))
+        val scanner = Scanner(System.`in`)
 
-        while(true){
-            reader.lineSequence().forEach {
-                //println("a sor: "+it)
-                val cmd = it.split(' ')
+        testing@ while(true){
+            while (scanner.hasNextLine()) {
+                val cmd = scanner.nextLine().split(' ')
                 when (cmd[0]){
                     "test"->{
-                        Tests.run(cmd[1].toInt())
+                        try {
+                            Tests.run(cmd[1].toInt())
+                        }catch (e: Exception){
+                            println("Hibás parancs")
+                        }
+
                     }
                     "add"->{
                         try {
@@ -81,11 +86,15 @@ class Game(comp: Boolean){
                             if(cmd.size > 2)
                                 n = cmd[2].toInt()
                             Tests.add(idx,n)
-                        } catch (e: NumberFormatException){
-                            var n = 1
-                            if(cmd.size > 2)
-                                n = cmd[2].toInt()
-                            Tests.add(cmd[1],n)
+                        } catch (e: Exception){
+                            try {
+                                var n = 1
+                                if(cmd.size > 2)
+                                    n = cmd[2].toInt()
+                                Tests.add(cmd[1],n)
+                            }catch (e:Exception){
+                                println("Hibás parancs")
+                            }
                         }
                     }
                     "print" ->{
@@ -95,7 +104,17 @@ class Game(comp: Boolean){
                         Tests.turn()
                     }
                     "play" ->{
-                        Game.current.Hand.cards[cmd[1].toInt()].play()
+                        try {
+                            current.Hand.cards[cmd[1].toInt()].play()
+                        }catch (e: Exception){ println("Hibás parancs")}
+                    }
+                    "drop"->{
+                        try {
+                            current.Hand.cards[cmd[1].toInt()].drop()
+                        }catch (e: Exception){ println("Hibás parancs")}
+                    }
+                    "end" -> {
+                        break@testing
                     }
                     else ->{
                         println("Ismeretlen parancs")
@@ -105,6 +124,7 @@ class Game(comp: Boolean){
 
         }
 
+        scanner.close()
 
 
 /*
@@ -116,15 +136,15 @@ add bagoly 1
         p1.creasteStarterPile(decktype.StarterCat)
         p1.DrawPile.shuffle()
         //p1.Hand.cards.addAll(p1.DrawPile.draw(3))
-        p1.Hand.cards.add(Arresto_momentum())
-        p1.Hand.cards.add(Aguamenti())
-        p1.Hand.cards.add(Albus_Dumbledore())
-        p1.Hand.cards.add(Alohomora())
-        p1.Hand.cards.add(Altatoital())
-        p1.Hand.cards.add(Aranycikesz())
-        p1.Hand.cards.add(Ascendio())
-        p1.Hand.cards.add(Bagoly())
-        p1.Hand.cards.add(Baziteo())
+        p1.Hand.cards.add(Spell.Arresto_momentum())
+        p1.Hand.cards.add(Spell.Aguamenti())
+        p1.Hand.cards.add(Ally.Albus_Dumbledore())
+        p1.Hand.cards.add(Spell.Alohomora())
+        p1.Hand.cards.add(Item.Altatoital())
+        p1.Hand.cards.add(Item.Aranycikesz())
+        p1.Hand.cards.add(Spell.Ascendio())
+        p1.Hand.cards.add(Ally.Bagoly())
+        p1.Hand.cards.add(Spell.Baziteo())
 
         println(p1)
 

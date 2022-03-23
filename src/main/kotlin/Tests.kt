@@ -1,3 +1,11 @@
+import Ally.*
+import Curse.Carbunculus
+import Curse.Confundo_curse
+import Curse.Conjuctivitis
+import Curse.Csalanartas
+import Item.*
+import Spell.*
+
 class Tests {
     companion object{
         fun run(n: Int){
@@ -52,6 +60,9 @@ class Tests {
             Game.current = Game.opponent
             Game.opponent = temp
             println(Game.current.name + " következik")
+            Game.current.DiscardPile.cards.addAll(Game.current.Hand.drawAll())
+            Game.current.DiscardPile.cards.addAll(Game.current.Played.drawAll())
+            Events.roundEndedEvent()
         }
 
         fun print(){
