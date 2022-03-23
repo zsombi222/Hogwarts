@@ -56,7 +56,7 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
             0 -> {
                 when (Game.current.Coins) {
                     0 -> {
-                        false
+                        true
                     }
                     else -> {
                         Game.current.Coins--
@@ -67,9 +67,11 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
                 }
             }
             1 -> {
-                Game.current.Coins += coins
-                coins = 0
-                used = true
+                if (coins != 0) {
+                    Game.current.Coins += coins
+                    coins = 0
+                    used = true
+                }
                 true
             }
             else -> {
@@ -78,4 +80,7 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
         }
     }
 
+    override fun toString(): String {
+        return "${super.toString()} ($coins)"
+    }
 }

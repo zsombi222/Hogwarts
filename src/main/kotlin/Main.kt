@@ -1,12 +1,12 @@
 import java.util.*
 import kotlin.random.Random
 
+
 fun main(args: Array<String>) {
-
-
     val game = Game(false)
     //game.start()
 }
+
 
 class Game(comp: Boolean) {
 
@@ -98,7 +98,28 @@ class Game(comp: Boolean) {
                     }
                     "play" -> {
                         try {
-                            current.Hand.cards[cmd[1].toInt()].play()
+                            val R = current.Hand.cards[cmd[1].toInt()].play()
+                            if (R != null) {
+                                while (true) {
+                                    println(R.text)
+                                    val l = readLine()
+                                    val Re = Response()
+                                    val lsplit = l?.split(' ')
+                                    try {
+                                        if (lsplit?.size == 1)
+                                            Re.n = lsplit[0].toInt()
+                                        else if (lsplit?.size == 2) {
+                                            Re.n = lsplit[1].toInt()
+                                            Re.text = lsplit[0]
+                                        }
+                                        break
+                                    } catch (e: Exception) {
+                                        println("hibás bemenet")
+                                    }
+                                    while (!R.req(Re)) {
+                                    }
+                                }
+                            }
                         } catch (e: Exception) {
                             println("Hibás parancs")
                         }
@@ -112,6 +133,34 @@ class Game(comp: Boolean) {
                     }
                     "end" -> {
                         break@testing
+                    }
+                    "use" -> {
+                        try {
+                            val R = current.Allies.cards[cmd[1].toInt()].use()
+                            if (R != null) {
+                                while (true) {
+                                    println(R.text)
+                                    val l = readLine()
+                                    val Re = Response()
+                                    val lsplit = l?.split(' ')
+                                    try {
+                                        if (lsplit?.size == 1)
+                                            Re.n = lsplit[0].toInt()
+                                        else if (lsplit?.size == 2) {
+                                            Re.n = lsplit[1].toInt()
+                                            Re.text = lsplit[0]
+                                        }
+                                        if (R.req(Re)) {
+                                            break
+                                        }
+                                    } catch (e: Exception) {
+                                        println("hibás bemenet")
+                                    }
+                                }
+                            }
+                        } catch (e: Exception) {
+                            println("Hibás parancs")
+                        }
                     }
                     else -> {
                         println("Ismeretlen parancs")
