@@ -61,62 +61,6 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     }
 }
 
-class Dobby : Card(house.None, 4, "Dobby a házimanó", Type.Ally) {
-    var used = false
-    var player: Player? = null
-    override fun play(): Request? {
-        player = Game.current
-        used = false
-        Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        return null
-    }
-
-    override fun discard() {
-        try {
-            Events.roundEndedEvents.remove(this)
-        } catch (e: Exception) {
-        }
-        super.discard()
-    }
-
-    override fun destroy() {
-        try {
-            Events.roundEndedEvents.remove(this)
-        } catch (e: Exception) {
-        }
-
-        super.destroy()
-    }
-
-    override fun use(): Request? {
-        if (!used && Game.current == player) {
-            used = true
-            Game.current.apply {
-                Hand.cards.addAll(DrawPile.draw(1))
-            }
-        }
-        return Request(::dropcard, "Drop a card [0-${Game.current.Hand.cards.size - 1}]")
-    }
-
-    fun dropcard(r: Response): Boolean {
-        return try {
-            Game.current.apply {
-                Hand.cards[r.n].drop()
-            }
-            true
-        } catch (e: Exception) {
-            println("Nem létezik ilyen lap")
-            false
-        }
-    }
-
-    fun reset() {
-        used = false
-    }
-}
-
 class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
     override fun play(): Request? {
         return null

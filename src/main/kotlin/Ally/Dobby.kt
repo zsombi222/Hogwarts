@@ -9,7 +9,7 @@ import Response
 import Type
 import house
 
-class Cho_Chang : Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally) {
+class Dobby : Card(house.None, 4, "Dobby a házimanó", Type.Ally) {
     var used = false
     var player: Player? = null
     override fun play(): Request? {
@@ -34,16 +34,14 @@ class Cho_Chang : Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally) {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
         }
+
         super.destroy()
     }
 
     override fun use(): Request? {
         if (!used && Game.current == player) {
             used = true
-            Game.current.apply {
-                Hand.cards.addAll(DrawPile.draw(1))
-            }
-            return Request(::dropcard, "Drop a card [0-${Game.current.Hand.cards.size - 1}]")
+            return Request(::dropcard, "Drop a card [0,1,2,3}]")
         }
         return null
     }
@@ -51,12 +49,12 @@ class Cho_Chang : Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally) {
     fun dropcard(r: Response): Boolean {
         return try {
             Game.current.apply {
-                Hand.cards[r.n].drop()
+                Game.ClassRoom4.cards[r.n].destroy()
             }
             true
         } catch (e: Exception) {
-            println("Nem létezik ilyen lap")
-            false
+            println("Nem lett elpusztítva lap")
+            true
         }
     }
 
