@@ -10,7 +10,7 @@ import house
 
 class Densaugeo : Card(house.Slytherin, 5, "Densaugeo", Type.Spell) {
     override fun play(): Request? {
-        if (Game.current.House == this.House) {
+        if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
             Game.current.Attacks++
         }
         Events.spellPlayedEvent()

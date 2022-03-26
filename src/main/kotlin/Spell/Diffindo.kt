@@ -10,8 +10,8 @@ import house
 
 class Diffindo : Card(house.Hufflepuff, 5, "Diffindo", Type.Spell) {
     override fun play(): Request? {
-        Game.current.apply {
-            if (House == this.House) {
+        if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
+            Game.current.apply {
                 Coins++
                 Hearts++
             }

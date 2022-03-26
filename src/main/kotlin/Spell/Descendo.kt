@@ -12,9 +12,9 @@ class Descendo : Card(house.Gryffindor, 5, "Descendo", Type.Spell) {
         Game.current.apply {
             Attacks += 2
             Hearts++
-            if (House == this.House) {
-                Hand.cards.addAll(DrawPile.draw(1))
-            }
+        }
+        if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
+            Game.current.Hand.cards.addAll(Game.current.DrawPile.draw(1))
         }
         Events.spellPlayedEvent()
         super.play()

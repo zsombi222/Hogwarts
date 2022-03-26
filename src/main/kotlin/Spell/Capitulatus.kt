@@ -17,7 +17,7 @@ class Capitulatus : Card(house.Gryffindor, 4, "Capitulatus", Type.Spell) {
                 println("Nincs már kártya az ellenfél kezében")
             }
         }
-        if (Game.current.House == House) {
+        if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
             Game.current.apply {
                 Attacks++
             }

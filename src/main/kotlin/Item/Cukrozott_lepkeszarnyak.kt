@@ -32,7 +32,7 @@ class Cukrozott_lepkeszarnyak : Card(house.Gryffindor, 4, "Cukrozott lepkeszárn
                 }
             }
             "discard" -> {
-                if (Game.current.House == this.House) {
+                if (Game.current.House == this.House || Game.current.hasAllyWithHouse(this.House)) {
                     try {
                         Game.current.DiscardPile.cards[r.n].destroy()
                     } catch (e: Exception) {
