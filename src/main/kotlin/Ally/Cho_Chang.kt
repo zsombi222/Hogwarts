@@ -18,6 +18,7 @@ class Cho_Chang : Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally) {
         Events.roundEndedEvents[this] = ::reset
         Game.current.Hand.cards.remove(this)
         Game.current.Allies.cards.add(this)
+        println("$name kijátszása...")
         return null
     }
 

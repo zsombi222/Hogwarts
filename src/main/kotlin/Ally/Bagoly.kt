@@ -19,6 +19,7 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
         Game.current.Allies.cards.add(this)
         player = Game.current
         used = false
+        println("$name kijátszása...")
         return null
     }
 

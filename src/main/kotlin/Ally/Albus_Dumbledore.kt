@@ -17,6 +17,7 @@ class Albus_Dumbledore : Card(house.None, 9, "Albus Dumbledore", Type.Ally) {
         Events.roundEndedEvents[this] = ::reset
         Game.current.Hand.cards.remove(this)
         Game.current.Allies.cards.add(this)
+        println("$name kijátszása...")
         return null
     }
 

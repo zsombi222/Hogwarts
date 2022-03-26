@@ -17,6 +17,7 @@ class Bimba_Professzor : Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Ally
         Events.roundEndedEvents[this] = ::reset
         Game.current.Hand.cards.remove(this)
         Game.current.Allies.cards.add(this)
+        println("$name kijátszása...")
         return null
     }
 
