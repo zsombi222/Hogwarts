@@ -20,6 +20,12 @@ object Events {
     var csalan = false
     var csalanN = 0
 
+    val reshuffle = hashMapOf<Deck, (Deck) -> Unit>()
+    fun reShuffleRequest(d: Deck) {
+        for (event in reshuffle) {
+            event.value(d)
+        }
+    }
 
     val coinEvents = hashMapOf<Card, () -> Unit>()
     fun coinEvent() {

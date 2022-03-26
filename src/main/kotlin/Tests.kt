@@ -56,23 +56,50 @@ class Tests {
         }
 
         fun turn() {
+            Game.current.apply {
+                DiscardPile.cards.addAll(Game.current.Hand.drawAll())
+                DiscardPile.cards.addAll(Game.current.Played.drawAll())
+                Hand.cards.addAll((Game.current.DrawPile.draw(5)))
+                Hearts = 0
+                Coins = 0
+                Attacks = 0
+            }
+
+
             val temp = Game.current
             Game.current = Game.opponent
             Game.opponent = temp
             println(Game.current.name + " következik")
-            Game.current.DiscardPile.cards.addAll(Game.current.Hand.drawAll())
-            Game.current.DiscardPile.cards.addAll(Game.current.Played.drawAll())
             Events.roundEndedEvent()
         }
 
+        fun newRound() {
+            for (p in listOf<Player>(Game.current, Game.opponent)) {
+                p.apply {
+                    Hearts = 0
+                    Coins = 0
+                    Attacks = 0
+                    DiscardPile.cards.addAll(Hand.drawAll())
+                    DiscardPile.cards.addAll(Played.drawAll())
+                    DiscardPile.cards.addAll(Allies.drawAll())
+                    Hand.cards.addAll((DrawPile.draw(5)))
+                    Health = Max_health
+                }
+            }
+            println("${Game.current.name} következik")
+        }
+
+
         fun print() {
-            println("_____________________")
-            println("__Jelenlegi játékos__")
-            print(Game.current)
-            println()
             println("_____________________")
             println("______Ellenfél_______")
             print(Game.opponent)
+            println()
+            println("_____________________")
+            println("__Jelenlegi játékos__")
+            print(Game.current)
+
+
         }
 
         val keys = setOf(

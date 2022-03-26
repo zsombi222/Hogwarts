@@ -20,8 +20,8 @@ class Game(comp: Boolean) {
         lateinit var Books: Deck
         lateinit var Destructed: Deck
         lateinit var ClassRoom4: Deck
-        var current: Player = Human()
-        var opponent: Player = Human()
+        lateinit var current: Player
+        lateinit var opponent: Player
     }
 
 
@@ -32,8 +32,9 @@ class Game(comp: Boolean) {
         Destructed = Deck(decktype.Empty)
         ClassRoom4 = Deck(decktype.Empty)
 
-        current = Human()
-        opponent = Human()
+        ClassRoom.shuffle()
+        Curses.shuffle()
+        ClassRoom4.cards.addAll(ClassRoom.draw(4))
 
         if (comp) {
             p1 = Human("Vivi", house.Slytherin)
@@ -52,9 +53,10 @@ class Game(comp: Boolean) {
             opponent = p1
         }
 
+        Tests.newRound()
+
         ////////// TEST SECTION
-
-
+        
         current = p1
         opponent = p2
 
@@ -131,9 +133,6 @@ class Game(comp: Boolean) {
                             println("Hibás parancs")
                         }
                     }
-                    "end" -> {
-                        break@testing
-                    }
                     "use" -> {
                         try {
                             val R = current.Allies.cards[cmd[1].toInt()].use()
@@ -161,6 +160,24 @@ class Game(comp: Boolean) {
                         } catch (e: Exception) {
                             println("Hibás parancs")
                         }
+                    }
+                    "<3" -> {
+                        current.heal()
+                    }
+                    "/" -> {
+                        if (current.attack()) {
+                            Tests.newRound()
+                        }
+                    }
+                    "buy" -> {
+                        try {
+                            current.buy(cmd[1].toInt())
+                        } catch (e: Exception) {
+                            println(ClassRoom4.valPrint())
+                        }
+                    }
+                    "end" -> {
+                        break@testing
                     }
                     else -> {
                         println("Ismeretlen parancs")

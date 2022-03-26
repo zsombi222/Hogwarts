@@ -15,6 +15,9 @@ class Deck(val dtype: decktype) {
 
     fun draw(n: Int): (List<Card>) {
         val list = mutableListOf<Card>()
+        if (cards.size == 0) {
+            Events.reShuffleRequest(this)
+        }
         for (i in 0 until n) {
             if (cards.size > 0)
                 list.add(cards.removeAt(0))
@@ -46,6 +49,17 @@ class Deck(val dtype: decktype) {
             }
         }
         return db
+    }
+
+    fun valPrint(): String {
+        var s = ""
+        for (i in 0 until cards.size) {
+            s += "\t$i. ${cards[i]} (${cards[i].value})"
+            if (i < cards.size - 1) {
+                s += "\n"
+            }
+        }
+        return s
     }
 
     override fun toString(): String {

@@ -10,6 +10,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     open fun play(): Request? {
         Game.current.Hand.cards.remove(this)
         Game.current.Played.cards.add(this)
+        println("$name kijátszása...")
         return null
     }
 
@@ -259,12 +260,6 @@ class Oppugno : Card(house.None, 5, "Oppugno", Type.Spell) {
     }
 }
 
-class Palca : Card(house.None, 0, "Pálca", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Penna : Card(house.Hufflepuff, 3, "Penna", Type.Item) {
     override fun play(): Request? {
         return null
@@ -416,12 +411,6 @@ class Tarantallegra : Card(house.None, 8, "Tarantallegra", Type.Spell) {
 }
 
 class Vajsor : Card(house.None, 2, "Vajsör", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Ust : Card(house.None, 0, "Üst", Type.Item) {
     override fun play(): Request? {
         return null
     }
