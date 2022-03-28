@@ -1,6 +1,16 @@
 # Hogwarts
+---
+## Futtatás:
+Windows:
+- Töltsd le a build/libs mappa tartalmát
+- dupla klikk a Hogwarts.bat-ra
 
-### CLI:
+Windows/Linux terminal:
+- java -jar .\Hogwarts-1.0-SNAPSHOT.jar
+
+---
+
+## CLI:
 
 (csak tesztelésre használandó)
 
