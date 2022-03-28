@@ -15,9 +15,7 @@ class Bimba_Professzor : Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Ally
         player = Game.current
         used = false
         Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        println("$name kijátszása...")
+        super.play()
         return null
     }
 

@@ -9,7 +9,11 @@ enum class Type {
 abstract class Card(val House: house, val value: Int, val name: String, val type: Type) {
     open fun play(): Request? {
         Game.current.Hand.cards.remove(this)
-        Game.current.Played.cards.add(this)
+        if (this.type == Type.Ally) {
+            Game.current.Allies.cards.add(this)
+        } else {
+            Game.current.Played.cards.add(this)
+        }
         println("$name kijátszása...")
         return null
     }
@@ -62,66 +66,6 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     }
 }
 
-class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Egyel_csigat : Card(house.None, 0, "Egyél csigát", Type.Curse) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Exmamoriam : Card(house.Ravenclaw, 5, "Exmamoriam", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Expecto_patronum : Card(house.None, 5, "Expecto patronum", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Felix_Felicis : Card(house.None, 5, "Felix Felicis", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Flipendo : Card(house.None, 8, "Flipendo", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Flitwick_Professzor : Card(house.Ravenclaw, 7, "Flitwick Professzor", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Fozetkeszlet : Card(house.None, 5, "Főzetkészlet", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Gancsrontas : Card(house.None, 0, "Gáncsrontás", Type.Curse) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Geminio : Card(house.None, 0, "Geminio", Type.Curse) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Gildroy_Lockhart : Card(house.Ravenclaw, 5, "Gildroy Lockhart", Type.Ally) {
     override fun play(): Request? {
         return null
@@ -135,12 +79,6 @@ class Ginny_Weasley : Card(house.None, 4, "Ginny Weasley", Type.Ally) {
 }
 
 class Gregory_Monstro : Card(house.Slytherin, 6, "Gregory Monstro", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Gumilabrontas : Card(house.None, 0, "Gumilábrontás", Type.Curse) {
     override fun play(): Request? {
         return null
     }
@@ -176,19 +114,7 @@ class Konyv : Card(house.None, 3, "Könyv", Type.Item) {
     }
 }
 
-class Koromnovelo_rontas : Card(house.None, 0, "Körömnövelő rontás", Type.Curse) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Kritalygomb : Card(house.Ravenclaw, 3, "Kritálygömb", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Levicorpus : Card(house.None, 0, "Levicorpus", Type.Curse) {
     override fun play(): Request? {
         return null
     }
@@ -326,12 +252,6 @@ class Relaxo : Card(house.Slytherin, 6, "Relaxo", Type.Spell) {
     }
 }
 
-class Remdenever_rontas : Card(house.None, 0, "Rémdenevér rontás", Type.Curse) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Remszem_Mordon : Card(house.None, 5, "Rémszem Mordon", Type.Ally) {
     override fun play(): Request? {
         return null
@@ -369,12 +289,6 @@ class Ron_Weasley : Card(house.Gryffindor, 5, "Ron Weasley", Type.Ally) {
 }
 
 class Rubeus_Hagrid : Card(house.None, 5, "Rubeus Hagrid", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Sectumsempra : Card(house.None, 0, "Sectumsempra", Type.Curse) {
     override fun play(): Request? {
         return null
     }

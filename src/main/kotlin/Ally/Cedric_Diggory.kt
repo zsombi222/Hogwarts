@@ -16,9 +16,7 @@ class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
         used = false
         Events.roundEndedEvents[this] = ::reset
         Events.healthIncreased[this] = ::skill
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        println("$name kijátszása...")
+        super.play()
         return null
     }
 

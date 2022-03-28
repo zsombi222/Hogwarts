@@ -15,11 +15,9 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
     var player: Player? = null
     override fun play(): Request? {
         Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
         player = Game.current
         used = false
-        println("$name kijátszása...")
+        super.play()
         return null
     }
 

@@ -16,9 +16,7 @@ class Dobby : Card(house.None, 4, "Dobby a házimanó", Type.Ally) {
         player = Game.current
         used = false
         Events.roundEndedEvents[this] = ::reset
-        Game.current.Hand.cards.remove(this)
-        Game.current.Allies.cards.add(this)
-        println("$name kijátszása...")
+        super.play()
         return null
     }
 
