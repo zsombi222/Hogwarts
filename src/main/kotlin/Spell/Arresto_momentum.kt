@@ -3,6 +3,7 @@ package Spell
 import Card
 import Events
 import Game
+import Player
 import Request
 import Type
 import house
@@ -18,10 +19,10 @@ class Arresto_momentum : Card(house.None, 3, "Arresto momentum", Type.Spell) {
         return null
     }
 
-    override fun discard() {
+    override fun drop(p: Player) {
         Game.current.apply {
             Hearts++
         }
-        super.discard()
+        super.drop(p)
     }
 }
