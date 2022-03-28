@@ -9,16 +9,11 @@ class Tests {
             println("Teszt $n futtatása...")
             when (n) {
                 0 -> {
-                    Tests.add("alohomora", 7)
-                    add("macska")
-                    add("ust")
-                    add("palca")
+                    add("bagoly")
+                    Game.current.Hand.cards[5].play()
                     turn()
-                    add("alohomora", 7)
-                    add("varangy")
-                    add("ust")
-                    add("palca")
-                    print()
+                    add("altatoital")
+                    //play 5
                 }
             }
         }
@@ -201,44 +196,44 @@ class Tests {
 
         val d = Deck(decktype.Empty)
         val ctrs = mutableListOf(
-            Aguamenti::class.java,
-            Albus_Dumbledore::class.java,
-            Altatoital::class.java,
-            Aranycikesz::class.java,
-            Arresto_momentum::class.java,
-            Ascendio::class.java,
-            Baziteo::class.java,
-            Bimba_Professzor::class.java,
-            Bombarda::class.java,
-            Boszorkanyfukivonat::class.java,
-            Buvos_bizsere::class.java,
-            Capitulatus::class.java,
-            Cave_malicium::class.java,
-            Cedric_Diggory::class.java,
-            Cho_Chang::class.java,
-            Confundo::class.java,
-            Crucio::class.java,
-            Cukrozott_lepkeszarnyak::class.java,
-            Csokibeka::class.java,
-            Densaugeo::class.java,
-            Descendo::class.java,
-            Diffindo::class.java,
-            Disaudio::class.java,
-            Dobby::class.java,
-            Draco_Malfoy::class.java,
-            Exmamoriam::class.java,
-            Expecto_patronum::class.java,
-            Felix_Felicis::class.java,
-            Flipendo::class.java,
-            Flitwick_Professzor::class.java,
-            Fozetkeszlet::class.java,
-            Gildroy_Lockhart::class.java,
-            Ginny_Weasley::class.java,
-            Gregory_Monstro::class.java,
-            Harry_Potter::class.java,
-            Hermione_Granger::class.java,
-            Imperio::class.java,
-            Invito::class.java,
+            Aguamenti::class.java,                  //test OK
+            Albus_Dumbledore::class.java,           //test OK
+            Altatoital::class.java,                 //test OK
+            Aranycikesz::class.java,                //test OK
+            Arresto_momentum::class.java,           //FIX
+            Ascendio::class.java,                   //test OK
+            Baziteo::class.java,                    //test OK
+            Bimba_Professzor::class.java,           //test OK
+            Bombarda::class.java,                   //FIX
+            Boszorkanyfukivonat::class.java,        //FIX
+            Buvos_bizsere::class.java,              //test OK
+            Capitulatus::class.java,                //FIX + TODO gryffindor test
+            Cave_malicium::class.java,              //FIX
+            Cedric_Diggory::class.java,             //FIX
+            Cho_Chang::class.java,                  //test OK + TODO mielott valsztok printelni a handet
+            Confundo::class.java,                   //FIX
+            Crucio::class.java,                     //
+            Cukrozott_lepkeszarnyak::class.java,    //
+            Csokibeka::class.java,                  //
+            Densaugeo::class.java,                  //
+            Descendo::class.java,                   //
+            Diffindo::class.java,                   //
+            Disaudio::class.java,                   //
+            Dobby::class.java,                      //
+            Draco_Malfoy::class.java,               //
+            Exmamoriam::class.java,                 //
+            Expecto_patronum::class.java,           //
+            Felix_Felicis::class.java,              //
+            Flipendo::class.java,                   //
+            Flitwick_Professzor::class.java,        //
+            Fozetkeszlet::class.java,               //
+            Gildroy_Lockhart::class.java,           //
+            Ginny_Weasley::class.java,              //
+            Gregory_Monstro::class.java,            //
+            Harry_Potter::class.java,               //
+            Hermione_Granger::class.java,           //
+            Imperio::class.java,                    //
+            Invito::class.java,                     //
             Kritalygomb::class.java,
             Locomotor::class.java,
             Lumos::class.java,
@@ -278,9 +273,9 @@ class Tests {
             Vingardium_leviosa::class.java,
             Zacharias_Smith::class.java,
             Zsugoritott_fej::class.java,
-            Carbunculus::class.java,
-            Confundo_curse::class.java,
-            Conjuctivitis::class.java,
+            Carbunculus::class.java,                //test OK
+            Confundo_curse::class.java,             //test OK
+            Conjuctivitis::class.java,              //FIX
             Csalanartas::class.java,
             Egyel_csigat::class.java,
             Gancsrontas::class.java,
@@ -291,10 +286,10 @@ class Tests {
             Remdenever_rontas::class.java,
             Sectumsempra::class.java,
             Konyv::class.java,
-            Alohomora::class.java,
+            Alohomora::class.java,                  //test OK
             Ust::class.java,
             Palca::class.java,
-            Bagoly::class.java,
+            Bagoly::class.java,                     //test OK
             Varangy::class.java,
             Macska::class.java
         )
