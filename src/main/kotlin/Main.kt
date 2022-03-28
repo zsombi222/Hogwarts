@@ -114,11 +114,11 @@ class Game(comp: Boolean) {
                                             Re.n = lsplit[1].toInt()
                                             Re.text = lsplit[0]
                                         }
+                                        while (!R.req(Re)) {
+                                        }
                                         break
                                     } catch (e: Exception) {
                                         println("hibás bemenet")
-                                    }
-                                    while (!R.req(Re)) {
                                     }
                                 }
                             }
