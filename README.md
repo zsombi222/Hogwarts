@@ -23,7 +23,7 @@ print
 - információt ír ki az adott játékosról
 - <3 jelzés a kapott szív jelölőket számolja
 - / jelzés a kapott villámokat
-- ¤ jelzés a kapott érméket
+- $ jelzés a kapott érméket
 - Élet: a még adott körben a játékos élete
 - Pont: hány ájulása van még hátra
 
