@@ -1,8 +1,5 @@
 import Ally.*
-import Curse.Carbunculus
-import Curse.Confundo_curse
-import Curse.Conjuctivitis
-import Curse.Csalanartas
+import Curse.*
 import Item.*
 import Spell.*
 
@@ -70,6 +67,7 @@ class Tests {
             Game.current = Game.opponent
             Game.opponent = temp
             println(Game.current.name + " következik")
+            CurseController.reset()
             Events.roundEndedEvent()
         }
 
@@ -181,7 +179,7 @@ class Tests {
             "zacharias_smith",
             "zsugoritott_fej",
             "carbunculus",
-            "confundo_curse",
+            "confundo_rontas",
             "conjuctivitis",
             "csalanartas",
             "egyel_csigat",

@@ -1,8 +1,5 @@
 import Ally.*
-import Curse.Carbunculus
-import Curse.Confundo_curse
-import Curse.Conjuctivitis
-import Curse.Csalanartas
+import Curse.*
 import Item.*
 import Spell.*
 
@@ -15,6 +12,9 @@ class Deck(val dtype: decktype) {
 
     fun draw(n: Int): (List<Card>) {
         val list = mutableListOf<Card>()
+        if (Events.remdenever && Game.current.blockDrawPile(this)) {
+            return list
+        }
         if (cards.size == 0) {
             Events.reShuffleRequest(this)
         }
@@ -51,10 +51,34 @@ class Deck(val dtype: decktype) {
         return db
     }
 
-    fun valPrint(): String {
+    fun hasOnlyCurses(): Boolean {
+        cards.forEach() {
+            if (it.type != Type.Curse) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun printCurses(): String {
         var s = ""
         for (i in 0 until cards.size) {
-            s += "\t$i. ${cards[i]} (${cards[i].value})"
+            if (cards[i].type == Type.Curse)
+                s += "\t$i. ${cards[i]}"
+            if (i < cards.size - 1) {
+                s += "\n"
+            }
+        }
+        return s
+    }
+
+    fun valPrint(): String {
+        var plus = 0
+        if (Events.carbunculus)
+            plus = Events.carbunculusN
+        var s = ""
+        for (i in 0 until cards.size) {
+            s += "\t$i. ${cards[i]} (${cards[i].value + plus})"
             if (i < cards.size - 1) {
                 s += "\n"
             }
@@ -199,6 +223,8 @@ class Deck(val dtype: decktype) {
             cards.add(T::class.java.getDeclaredConstructor().newInstance())
         }
     }
+
+
 }
 
 enum class decktype {

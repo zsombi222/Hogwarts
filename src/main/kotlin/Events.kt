@@ -8,6 +8,8 @@ object Events {
     var newSpellToTop = false
     var newSpellToTopN = 0
 
+    //curses
+
     var carbunculus = false
     var carbunculusN = 0
 
@@ -19,6 +21,23 @@ object Events {
 
     var csalan = false
     var csalanN = 0
+
+    var egyelcsigat = false
+    var egyelcsigatN = 0
+
+    var gancsrontas = false
+    var gancsrontasN = 0
+
+    var remdenever = false
+    var remdeneverN = 0
+
+    var koromnovelo = false
+    var koromnoveloN = 0
+
+    var sectumsempra = false
+    var sectumsempraN = 0
+
+    //end curses
 
     val reshuffle = hashMapOf<Deck, (Deck) -> Unit>()
     fun reShuffleRequest(d: Deck) {

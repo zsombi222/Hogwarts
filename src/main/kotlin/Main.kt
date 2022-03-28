@@ -56,7 +56,7 @@ class Game(comp: Boolean) {
         Tests.newRound()
 
         ////////// TEST SECTION
-        
+
         current = p1
         opponent = p2
 
@@ -100,7 +100,7 @@ class Game(comp: Boolean) {
                     }
                     "play" -> {
                         try {
-                            val R = current.Hand.cards[cmd[1].toInt()].play()
+                            val R = CurseController.checkPlay(current.Hand.cards[cmd[1].toInt()])
                             if (R != null) {
                                 while (true) {
                                     println(R.text)
@@ -135,7 +135,7 @@ class Game(comp: Boolean) {
                     }
                     "use" -> {
                         try {
-                            val R = current.Allies.cards[cmd[1].toInt()].use()
+                            val R = CurseController.checkUse(current.Allies.cards[cmd[1].toInt()])
                             if (R != null) {
                                 while (true) {
                                     println(R.text)
@@ -162,10 +162,10 @@ class Game(comp: Boolean) {
                         }
                     }
                     "<3" -> {
-                        current.heal()
+                        CurseController.checkHeal()
                     }
                     "/" -> {
-                        if (current.attack()) {
+                        if (CurseController.checkAttack()) {
                             Tests.newRound()
                         }
                     }
