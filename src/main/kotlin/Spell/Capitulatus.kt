@@ -12,7 +12,7 @@ class Capitulatus : Card(house.Gryffindor, 4, "Capitulatus", Type.Spell) {
     override fun play(): Request? {
         Game.opponent.apply {
             try {
-                DiscardPile.cards.add(Hand.drawIdx(Random.nextInt(0, Hand.cards.size + 1)))
+                Hand.cards[Random.nextInt(0, Hand.cards.size)].drop()
             } catch (e: Exception) {
                 println("Nincs már kártya az ellenfél kezében")
             }
