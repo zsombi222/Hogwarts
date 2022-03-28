@@ -13,19 +13,20 @@ class Altatoital : Card(house.None, 7, "Altatóital", Type.Item) {
         Game.current.apply {
             Attacks += 2
         }
-        val r = Request(::discardAlly, "Válassz szövetségest: [0-${Game.opponent.Allies.cards.size - 1}]")
         Events.itemPlayedEvent()
         super.play()
-        return r
+        if (Game.opponent.Allies.cards.size > 0)
+            return Request(this::discardAlly, "Válassz szövetségest: [0-${Game.opponent.Allies.cards.size - 1}]")
+        return null
     }
 
     fun discardAlly(r: Response): Boolean {
-        try {
+        return try {
             Game.opponent.Allies.cards[r.n].discard()
-            return true
+            true
         } catch (e: Exception) {
             println("Nincs ilyen szövetséges")
+            false
         }
-        return false
     }
 }
