@@ -10,6 +10,10 @@ abstract class Player(open val name: String, open val House: house, val dtype: d
     var Stuns = 3
 
     var Hearts = 0
+        set(value) {
+            field = value
+            Events.healthIncreasedEvent()
+        }
     var Attacks = 0;
     var Coins = 0;
 

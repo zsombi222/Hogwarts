@@ -15,6 +15,12 @@ class Tests {
                     add("altatoital")
                     //play 5
                 }
+                1 -> {
+                    add("cedric_diggory")
+                    Game.current.Hand.cards[5].play()
+                    add("ust")
+                    
+                }
             }
         }
 
