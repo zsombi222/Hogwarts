@@ -18,45 +18,31 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
         return null
     }
 
-    open fun drop() {
-        Game.current.Hand.cards.remove(this)
-        Game.current.DiscardPile.cards.add(this)
+    open fun drop(p: Player = Game.current) {
+        p.Hand.cards.remove(this)
+        p.DiscardPile.cards.add(this)
         println("$name eldobása kézből...")
     }
 
-    open fun discard() {
-        try {
-            Game.current.Played.cards.remove(this)
-        } catch (e: Exception) {
-            Game.current.Allies.cards.remove(this)
-        } finally {
-            Game.current.DiscardPile.cards.add(this)
-            println("$name eldobása a kijátszott lapok közül...")
-        }
+    open fun discard(p: Player = Game.current) {
+        p.Played.cards.remove(this)
+        p.Allies.cards.remove(this)
+        println("$name eldobása a kijátszott lapok közül...")
+        p.DiscardPile.cards.add(this)
     }
 
-    open fun destroy() {
-        try {
-            Game.current.Hand.cards.remove(this)
-        } catch (e: Exception) {
-        }
-        try {
-            Game.current.DiscardPile.cards.remove(this)
-        } catch (e: Exception) {
-        }
-        try {
-            Game.current.Played.cards.remove(this)
-        } catch (e: Exception) {
-        }
-        try {
-            Game.current.DrawPile.cards.remove(this)
-        } catch (e: Exception) {
-        }
-        try {
-            Game.current.Allies.cards.remove(this)
-        } catch (e: Exception) {
-        }
+    open fun destroy(p: Player = Game.current) {
+        p.Hand.cards.remove(this)
+        p.DiscardPile.cards.remove(this)
+        p.Played.cards.remove(this)
+        p.DrawPile.cards.remove(this)
+        p.Allies.cards.remove(this)
+        Game.ClassRoom4.cards.remove(this)
+        Game.ClassRoom.cards.remove(this)
+
         Game.Destructed.cards.add(this)
+
+        println("$name elpusztítása...")
     }
 
     open fun use(): Request? {
