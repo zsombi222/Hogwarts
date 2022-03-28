@@ -41,7 +41,9 @@ class CurseController {
                     }
 
                 }
-                else -> null
+                Type.Curse -> {
+                    c.play()
+                }
             }
         }
 
