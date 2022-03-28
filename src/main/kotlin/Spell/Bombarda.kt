@@ -20,7 +20,8 @@ class Bombarda : Card(house.None, 2, "Bombarda", Type.Spell) {
 
     fun destroy(r: Response): Boolean {
         return try {
-            Game.Destructed.cards.add(Game.ClassRoom4.drawIdx(r.n))
+            Game.ClassRoom4.cards[r.n].destroy()
+            Game.ClassRoom4.cards.addAll(Game.ClassRoom.draw(1))
             true
         } catch (e: Exception) {
             println("Nem lett kártya elpusztítva")
