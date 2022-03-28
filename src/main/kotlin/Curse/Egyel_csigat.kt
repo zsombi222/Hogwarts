@@ -6,19 +6,19 @@ import Request
 import Type
 import house
 
-class Confundo_curse : Card(house.None, 0, "Confundo rontás", Type.Curse) {
+class Egyel_csigat : Card(house.None, 0, "Egyél csigát", Type.Curse) {
     override fun play(): Request? {
-        Events.confundoCurse = true
-        Events.confundoCurseN++
+        Events.egyelcsigatN++
+        Events.egyelcsigat = true
         Events.cursePlayedEvent()
         super.play()
         return null
     }
 
     override fun discard() {
-        Events.confundoCurseN--
-        if (Events.confundoCurseN == 0) {
-            Events.confundoCurse = false
+        Events.egyelcsigatN--
+        if (Events.egyelcsigatN == 0) {
+            Events.egyelcsigat = false
         }
         super.discard()
     }
