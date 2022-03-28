@@ -21,6 +21,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     open fun drop() {
         Game.current.Hand.cards.remove(this)
         Game.current.DiscardPile.cards.add(this)
+        println("$name eldobása kézből...")
     }
 
     open fun discard() {
@@ -30,6 +31,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
             Game.current.Allies.cards.remove(this)
         } finally {
             Game.current.DiscardPile.cards.add(this)
+            println("$name eldobása a kijátszott lapok közül...")
         }
     }
 
