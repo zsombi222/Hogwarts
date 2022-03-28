@@ -10,8 +10,8 @@ fun main(args: Array<String>) {
 
 class Game(comp: Boolean) {
 
-    lateinit var p1: Player
-    lateinit var p2: Player
+    var p1: Player
+    var p2: Player
 
     companion object {
 
@@ -128,7 +128,7 @@ class Game(comp: Boolean) {
                     }
                     "drop" -> {
                         try {
-                            current.Hand.cards[cmd[1].toInt()].drop()
+                            CurseController.checkDrop(current.Hand.cards[cmd[1].toInt()])
                         } catch (e: Exception) {
                             println("Hibás parancs")
                         }

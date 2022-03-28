@@ -48,6 +48,10 @@ class CurseController {
         }
 
         fun checkUse(c: Card): Request? {
+            if (Game.current.Hand.getCurseNum() > 0) {
+                println("Először a rontásokat kell kijátszanod")
+                return null
+            }
             return if (Events.csalan) {
                 null
             } else {
@@ -56,6 +60,10 @@ class CurseController {
         }
 
         fun checkAttack(): Boolean {
+            if (Game.current.Hand.getCurseNum() > 0) {
+                println("Először a rontásokat kell kijátszanod")
+                return false
+            }
             return if (Events.confundoCurse) {
                 return if (Events.gancsrontas) {
                     Game.current.attack(0)
@@ -73,6 +81,10 @@ class CurseController {
         }
 
         fun checkHeal() {
+            if (Game.current.Hand.getCurseNum() > 0) {
+                println("Először a rontásokat kell kijátszanod")
+                return
+            }
             if (Events.sectumsempra) {
                 if (Events.gancsrontas) {
                     Game.current.heal(0)
@@ -89,6 +101,13 @@ class CurseController {
             }
         }
 
+        fun checkDrop(c: Card) {
+            if (Game.current.Hand.getCurseNum() > 0) {
+                println("Először a rontásokat kell kijátszanod")
+                return
+            }
+            c.drop()
+        }
 
         fun reset() {
             spellcount = 0
@@ -98,5 +117,7 @@ class CurseController {
             attacked = false
             healed = false
         }
+
+
     }
 }

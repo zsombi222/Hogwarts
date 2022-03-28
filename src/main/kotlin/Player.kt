@@ -48,6 +48,10 @@ abstract class Player(open val name: String, open val House: house, val dtype: d
     }
 
     fun buy(idx: Int) {
+        if (Game.current.Hand.getCurseNum() > 0) {
+            println("Először a rontásokat kell kijátszanod")
+            return
+        }
         var plus = 0
         if (Events.carbunculus)
             plus = Events.carbunculusN
