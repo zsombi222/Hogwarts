@@ -16,6 +16,7 @@ class Confundo : Card(house.None, 7, "Confundo", Type.Spell) {
                 DiscardPile.cards.add(c)
                 if (c.type == Type.Curse || c.type == Type.Spell) {
                     Game.current.Coins++
+                    Game.current.Hand.cards.addAll(Game.current.DrawPile.draw(1))
                 } else if (c.type == Type.Ally || c.type == Type.Item) {
                     Game.current.Attacks++
                     Game.current.Hearts++

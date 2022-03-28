@@ -218,9 +218,9 @@ class Tests {
             Baziteo::class.java,                    //test OK
             Bimba_Professzor::class.java,           //test OK
             Bombarda::class.java,                   //test OK
-            Boszorkanyfukivonat::class.java,        //FIX
+            Boszorkanyfukivonat::class.java,        //test OK
             Buvos_bizsere::class.java,              //test OK
-            Capitulatus::class.java,                //FIX + TODO gryffindor test
+            Capitulatus::class.java,                //test OK + TODO gryffindor test
             Cave_malicium::class.java,              //test OK
             Cedric_Diggory::class.java,             //FIX
             Cho_Chang::class.java,                  //test OK + TODO mielott valsztok printelni a handet
