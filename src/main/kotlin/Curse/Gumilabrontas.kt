@@ -3,6 +3,7 @@ package Curse
 import Card
 import Events
 import Game
+import Player
 import Request
 import Type
 import house
@@ -21,7 +22,7 @@ class Gumilabrontas : Card(house.None, 0, "Gumilábrontás", Type.Curse) {
         return null
     }
 
-    override fun discard() {
-        super.destroy()
+    override fun discard(p: Player) {
+        super.destroy(p)
     }
 }

@@ -3,6 +3,7 @@ package Item
 import Card
 import Events
 import Game
+import Player
 import Request
 import Type
 import house
@@ -20,11 +21,11 @@ class Boszorkanyfukivonat : Card(house.None, 6, "Boszorkányfűkivonat", Type.It
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         Events.newAllyToTopN--
         if (Events.newAllyToTopN == 0) {
             Events.newAllyToTop = false
         }
-        super.discard()
+        super.discard(p)
     }
 }

@@ -19,20 +19,20 @@ class Bimba_Professzor : Card(house.Hufflepuff, 7, "Bimba Professzor", Type.Ally
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
         }
-        super.discard()
+        super.discard(p)
     }
 
-    override fun destroy() {
+    override fun destroy(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
         }
-        super.destroy()
+        super.destroy(p)
     }
 
     override fun use(): Request? {

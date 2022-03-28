@@ -20,7 +20,7 @@ class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
@@ -29,10 +29,10 @@ class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
             Events.healthIncreased.remove(this)
         } catch (e: Exception) {
         }
-        super.discard()
+        super.discard(p)
     }
 
-    override fun destroy() {
+    override fun destroy(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
@@ -41,8 +41,7 @@ class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
             Events.healthIncreased.remove(this)
         } catch (e: Exception) {
         }
-
-        super.destroy()
+        super.destroy(p)
     }
 
     fun reset() {

@@ -2,6 +2,7 @@ package Curse
 
 import Card
 import Events
+import Player
 import Request
 import Type
 import house
@@ -15,11 +16,11 @@ class Koromnovelo_rontas : Card(house.None, 0, "Körömnövelő rontás", Type.C
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         Events.koromnoveloN--
         if (Events.koromnoveloN == 0) {
             Events.koromnovelo = false
         }
-        super.discard()
+        super.discard(p)
     }
 }

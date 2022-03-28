@@ -20,7 +20,7 @@ class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
@@ -29,10 +29,10 @@ class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
             Events.itemPlayedEvents.remove(this)
         } catch (e: Exception) {
         }
-        super.discard()
+        super.discard(p)
     }
 
-    override fun destroy() {
+    override fun destroy(p: Player) {
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
@@ -42,7 +42,7 @@ class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
         } catch (e: Exception) {
         }
 
-        super.destroy()
+        super.destroy(p)
     }
 
     fun reset() {

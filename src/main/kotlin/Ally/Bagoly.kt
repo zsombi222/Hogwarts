@@ -28,22 +28,22 @@ class Bagoly : Card(house.None, 0, "Bagoly", Type.Ally) {
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         coins = 0
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
         }
-        super.discard()
+        super.discard(p)
     }
 
-    override fun destroy() {
+    override fun destroy(p: Player) {
         coins = 0
         try {
             Events.roundEndedEvents.remove(this)
         } catch (e: Exception) {
         }
-        super.destroy()
+        super.destroy(p)
     }
 
     fun reset() {

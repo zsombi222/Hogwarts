@@ -22,7 +22,7 @@ class Altatoital : Card(house.None, 7, "Altatóital", Type.Item) {
 
     fun discardAlly(r: Response): Boolean {
         return try {
-            Game.opponent.Allies.cards[r.n].discard()
+            Game.opponent.Allies.cards[r.n].discard(Game.opponent)
             true
         } catch (e: Exception) {
             println("Nincs ilyen szövetséges")

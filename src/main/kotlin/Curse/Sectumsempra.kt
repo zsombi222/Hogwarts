@@ -2,6 +2,7 @@ package Curse
 
 import Card
 import Events
+import Player
 import Request
 import Type
 import house
@@ -15,11 +16,11 @@ class Sectumsempra : Card(house.None, 0, "Sectumsempra", Type.Curse) {
         return null
     }
 
-    override fun discard() {
+    override fun discard(p: Player) {
         Events.sectumsempraN--
         if (Events.sectumsempraN == 0) {
             Events.sectumsempra = false
         }
-        super.discard()
+        super.discard(p)
     }
 }
