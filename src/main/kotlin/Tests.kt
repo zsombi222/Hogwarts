@@ -49,8 +49,21 @@ class Tests {
 
         fun turn() {
             Game.current.apply {
-                DiscardPile.cards.addAll(Game.current.Hand.drawAll())
-                DiscardPile.cards.addAll(Game.current.Played.drawAll())
+                val toDiscard = mutableListOf<Card>()
+                val toDrop = mutableListOf<Card>()
+                Game.current.Hand.cards.forEach {
+                    toDrop.add(it)
+                }
+                Game.current.Played.cards.forEach {
+                    toDiscard.add(it)
+                }
+                toDiscard.forEach {
+                    it.discard()
+                }
+                toDrop.forEach {
+                    it.drop()
+                }
+
                 Hand.cards.addAll((Game.current.DrawPile.draw(5)))
                 Hearts = 0
                 Coins = 0
@@ -200,15 +213,15 @@ class Tests {
             Albus_Dumbledore::class.java,           //test OK
             Altatoital::class.java,                 //test OK
             Aranycikesz::class.java,                //test OK
-            Arresto_momentum::class.java,           //FIX
+            Arresto_momentum::class.java,           //test OK
             Ascendio::class.java,                   //test OK
             Baziteo::class.java,                    //test OK
             Bimba_Professzor::class.java,           //test OK
-            Bombarda::class.java,                   //FIX
+            Bombarda::class.java,                   //test OK
             Boszorkanyfukivonat::class.java,        //FIX
             Buvos_bizsere::class.java,              //test OK
             Capitulatus::class.java,                //FIX + TODO gryffindor test
-            Cave_malicium::class.java,              //FIX
+            Cave_malicium::class.java,              //test OK
             Cedric_Diggory::class.java,             //FIX
             Cho_Chang::class.java,                  //test OK + TODO mielott valsztok printelni a handet
             Confundo::class.java,                   //FIX
@@ -216,7 +229,7 @@ class Tests {
             Cukrozott_lepkeszarnyak::class.java,    //
             Csokibeka::class.java,                  //
             Densaugeo::class.java,                  //
-            Descendo::class.java,                   //
+            Descendo::class.java,                   //test OK
             Diffindo::class.java,                   //
             Disaudio::class.java,                   //
             Dobby::class.java,                      //
