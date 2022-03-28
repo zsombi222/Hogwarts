@@ -57,21 +57,21 @@ abstract class Player(open val name: String, open val House: house, val dtype: d
             when (Game.ClassRoom4.cards[idx].type) {
                 Type.Item -> {
                     if (Events.newItemToTop) {
-                        DrawPile.cards.add(Game.ClassRoom4.drawIdx(idx))
+                        DrawPile.cards.add(0, Game.ClassRoom4.drawIdx(idx))
                     } else {
                         DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
                     }
                 }
                 Type.Spell -> {
                     if (Events.newSpellToTop) {
-                        DrawPile.cards.add(Game.ClassRoom4.drawIdx(idx))
+                        DrawPile.cards.add(0, Game.ClassRoom4.drawIdx(idx))
                     } else {
                         DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
                     }
                 }
                 Type.Ally -> {
                     if (Events.newAllyToTop) {
-                        DrawPile.cards.add(Game.ClassRoom4.drawIdx(idx))
+                        DrawPile.cards.add(0, Game.ClassRoom4.drawIdx(idx))
                     } else {
                         DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
                     }
