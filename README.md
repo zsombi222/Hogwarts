@@ -7,6 +7,7 @@ Windows:
 
 Windows/Linux terminal:
 - java -jar .\Hogwarts-1.0-SNAPSHOT.jar
+- java -jar ./Hogwarts-1.0-SNAPSHOT.jar
 
 ---
 
