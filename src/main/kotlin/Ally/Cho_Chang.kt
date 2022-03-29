@@ -42,7 +42,7 @@ class Cho_Chang : Card(house.Ravenclaw, 6, "Cho Chang", Type.Ally) {
             Game.current.apply {
                 Hand.cards.addAll(DrawPile.draw(1))
             }
-            return Request(::dropcard, "Drop a card [0-${Game.current.Hand.cards.size - 1}]")
+            return Request(::dropcard, "Drop a card [0-${Game.current.Hand.cards.size - 1}]\n${Game.current.Hand}")
         }
         return null
     }
