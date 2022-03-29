@@ -57,9 +57,6 @@ class Game(comp: Boolean) {
 
         ////////// TEST SECTION
 
-        current = p1
-        opponent = p2
-
         val scanner = Scanner(System.`in`)
 
         testing@ while (true) {
@@ -114,9 +111,9 @@ class Game(comp: Boolean) {
                                             Re.n = lsplit[1].toInt()
                                             Re.text = lsplit[0]
                                         }
-                                        while (!R.req(Re)) {
+                                        if (R.req(Re)) {
+                                            break
                                         }
-                                        break
                                     } catch (e: Exception) {
                                         println("hibás bemenet")
                                     }
@@ -178,6 +175,18 @@ class Game(comp: Boolean) {
                     }
                     "end" -> {
                         break@testing
+                    }
+                    "ravenclaw" -> {
+                        current.House = house.Ravenclaw
+                    }
+                    "gryffindor" -> {
+                        current.House = house.Gryffindor
+                    }
+                    "slytherin" -> {
+                        current.House = house.Slytherin
+                    }
+                    "hufflepuff" -> {
+                        current.House = house.Hufflepuff
                     }
                     else -> {
                         println("Ismeretlen parancs")

@@ -19,7 +19,7 @@ class Tests {
                     add("cedric_diggory")
                     Game.current.Hand.cards[5].play()
                     add("ust")
-                    
+
                 }
             }
         }
@@ -226,11 +226,11 @@ class Tests {
             Bombarda::class.java,                   //test OK
             Boszorkanyfukivonat::class.java,        //test OK
             Buvos_bizsere::class.java,              //test OK
-            Capitulatus::class.java,                //test OK + TODO gryffindor test
+            Capitulatus::class.java,                //test OK
             Cave_malicium::class.java,              //test OK
-            Cedric_Diggory::class.java,             //FIX
-            Cho_Chang::class.java,                  //test OK + TODO mielott valsztok printelni a handet
-            Confundo::class.java,                   //FIX
+            Cedric_Diggory::class.java,             //test OK
+            Cho_Chang::class.java,                  //test OK
+            Confundo::class.java,                   //test OK
             Crucio::class.java,                     //
             Cukrozott_lepkeszarnyak::class.java,    //
             Csokibeka::class.java,                  //
@@ -294,20 +294,20 @@ class Tests {
             Zsugoritott_fej::class.java,
             Carbunculus::class.java,                //test OK
             Confundo_curse::class.java,             //test OK
-            Conjuctivitis::class.java,              //FIX
-            Csalanartas::class.java,
-            Egyel_csigat::class.java,
-            Gancsrontas::class.java,
-            Geminio::class.java,
-            Gumilabrontas::class.java,
-            Koromnovelo_rontas::class.java,
-            Levicorpus::class.java,
-            Remdenever_rontas::class.java,
-            Sectumsempra::class.java,
+            Conjuctivitis::class.java,              //test OK
+            Csalanartas::class.java,                //test OK
+            Egyel_csigat::class.java,               //test OK
+            Gancsrontas::class.java,                //test OK
+            Geminio::class.java,                    //test OK
+            Gumilabrontas::class.java,              //test OK
+            Koromnovelo_rontas::class.java,         //test OK
+            Levicorpus::class.java,                 //test OK
+            Remdenever_rontas::class.java,          //test OK
+            Sectumsempra::class.java,               //test OK
             Konyv::class.java,
             Alohomora::class.java,                  //test OK
-            Ust::class.java,
-            Palca::class.java,
+            Ust::class.java,                        //test OK
+            Palca::class.java,                      //test OK
             Bagoly::class.java,                     //test OK
             Varangy::class.java,
             Macska::class.java

@@ -1,4 +1,4 @@
-abstract class Player(open val name: String, open val House: house, val dtype: decktype = decktype.StarterOwl) {
+abstract class Player(open val name: String, open var House: house, val dtype: decktype = decktype.StarterOwl) {
     val Hand = Deck(decktype.Empty)
     var DrawPile = Deck(decktype.Empty)
     val DiscardPile = Deck(decktype.Empty)
@@ -144,13 +144,13 @@ $  : $Coins
     }
 }
 
-data class Human(override val name: String = "human", override val House: house = house.None) : Player(name, House) {
+data class Human(override val name: String = "human", override var House: house = house.None) : Player(name, House) {
     override fun toString(): String {
         return super.toString()
     }
 }
 
-data class Computer(override val name: String = "computer", override val House: house = house.None) :
+data class Computer(override val name: String = "computer", override var House: house = house.None) :
     Player(name, House) {
     override fun toString(): String {
         return super.toString()
