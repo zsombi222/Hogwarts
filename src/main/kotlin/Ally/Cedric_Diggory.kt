@@ -49,7 +49,7 @@ class Cedric_Diggory : Card(house.Hufflepuff, 6, "Cedric Diggory", Type.Ally) {
     }
 
     fun skill() {
-        if (!used && Game.current == player) {
+        if (!used && Game.current == player && !Events.csalan) {
             used = true
             Game.current.apply {
                 Attacks++

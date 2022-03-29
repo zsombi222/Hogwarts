@@ -50,7 +50,7 @@ class Draco_Malfoy : Card(house.Slytherin, 6, "Draco Malfoy", Type.Ally) {
     }
 
     fun skill() {
-        if (!used && Game.current == player) {
+        if (!used && Game.current == player && !Events.csalan) {
             used = true
             Game.current.apply {
                 Attacks += Game.opponent.Allies.cards.size
