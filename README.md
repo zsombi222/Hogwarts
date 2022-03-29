@@ -1,11 +1,15 @@
 # Hogwarts
 ---
+
 ## Futtatás:
+
 Windows:
+
 - Töltsd le a build/libs mappa tartalmát
 - dupla klikk a Hogwarts.bat-ra
 
 Windows/Linux terminal:
+
 - java -jar .\Hogwarts-1.0-SNAPSHOT.jar
 - java -jar ./Hogwarts-1.0-SNAPSHOT.jar
 
@@ -76,6 +80,22 @@ buy [idx]
 - ha nem adunk meg idx-et, akkor kiírja a tanterem lapjait
 - pl.: buy
 - pl.: buy 3
+
+ravenclaw
+
+-ház váltása az aktuális játékosra vonatkozóan
+
+gryffindor
+
+-ház váltása az aktuális játékosra vonatkozóan
+
+slytherin
+
+-ház váltása az aktuális játékosra vonatkozóan
+
+hufflepuff
+
+-ház váltása az aktuális játékosra vonatkozóan
 
 end
 
