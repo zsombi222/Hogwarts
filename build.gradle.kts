@@ -3,6 +3,8 @@ import java.util.regex.Pattern.compile
 
 plugins {
     kotlin("jvm") version "1.5.31"
+    id("org.openjfx.javafxplugin") version "0.0.10"
+    application
 }
 
 group = "me.arvai"
@@ -17,6 +19,7 @@ dependencies {
     testImplementation(kotlin("test"))
     //implementation(kotlin("reflect"))
     compile("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+    implementation("org.openjfx:javafx:11")
 }
 
 tasks.test {
@@ -27,6 +30,10 @@ tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
 }
 
+application {
+    mainClassName = "MainKt"
+}
+
 tasks.jar {
     manifest {
         attributes["Main-Class"] = "MainKt"
@@ -35,4 +42,9 @@ tasks.jar {
         from(zipTree(file.absoluteFile))
     }
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+javafx {
+    version = "11"
+    modules("javafx.controls", "javafx.fxml")
 }

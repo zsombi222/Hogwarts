@@ -40,6 +40,7 @@ abstract class Player(open val name: String, open var House: house, val dtype: d
 
     fun createStarterPile(dtype: decktype) {
         DrawPile = Deck(dtype)
+        DrawPile.shuffle()
     }
 
     fun hasAllyWithHouse(h: house): Boolean {

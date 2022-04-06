@@ -1,20 +1,162 @@
+import javafx.application.Application
+import javafx.collections.FXCollections
+import javafx.geometry.Insets
+import javafx.geometry.Orientation
+import javafx.geometry.Pos
+import javafx.geometry.Rectangle2D
+import javafx.scene.Scene
+import javafx.scene.control.*
+import javafx.scene.image.ImageView
+import javafx.scene.layout.Background
+import javafx.scene.layout.BackgroundFill
+import javafx.scene.layout.CornerRadii
+import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
+import javafx.stage.Screen
+import javafx.stage.Stage
+import javafx.stage.StageStyle
 import java.util.*
 import kotlin.random.Random
-
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    val game = Game(false)
+    Application.launch(App::class.java)
+
     //game.start()
 }
 
 
-class Game(comp: Boolean) {
+class Settings(
+    var comp: Boolean = false,
+    var name1: String = "p1",
+    var name2: String = "p2",
+    var house1: Int = 0,
+    var house2: Int = 0,
+    var deck1: Int = 0,
+    var deck2: Int = 0
+)
+
+class App() : Application() {
+
+    val settingsDialog: Dialog<Settings> = Dialog()
+
+    override fun start(s: Stage) {
+
+        val houseChoices =
+            FXCollections.observableArrayList("Ravenclaw", "Gryffindor", "Slytherin", "Hufflepuff")
+        val starterPileChoices =
+            FXCollections.observableArrayList("Bagoly", "Macska", "Varangy")
+
+        val startBtn = ButtonType("Start", ButtonBar.ButtonData.OK_DONE)
+        val cancelBtn = ButtonType("Kilépés", ButtonBar.ButtonData.CANCEL_CLOSE)
+        val choiceBox1 = ComboBox(houseChoices)
+        val choiceBox2 = ComboBox(houseChoices)
+        val nameBox1 = TextField("jatekos_1")
+        val nameBox2 = TextField("jatekos_2")
+        val choiceBox3 = ComboBox(starterPileChoices)
+        val choiceBox4 = ComboBox(starterPileChoices)
+        val compBox = CheckBox("Gép")
+        choiceBox1.apply {
+            value = house.Ravenclaw.toString()
+        }
+        choiceBox2.apply {
+            value = "Slytherin"
+        }
+        choiceBox3.apply {
+            value = "Bagoly"
+        }
+        choiceBox4.apply {
+            value = "Macska"
+        }
+
+        val settingsRoot = VBox().apply {
+            alignment = Pos.CENTER
+            children.add(nameBox1)
+            children.add(choiceBox1)
+            children.add(choiceBox3)
+            children.add(nameBox2)
+            children.add(compBox)
+            children.add(choiceBox2)
+            children.add(choiceBox4)
+        }
+
+        settingsDialog.apply {
+            initStyle(StageStyle.UNDECORATED)
+            title = "Hogwarts"
+            headerText = "Hogwarts"
+            dialogPane.buttonTypes.addAll(startBtn, cancelBtn)
+            dialogPane.content = settingsRoot
+
+            setResultConverter {
+                return@setResultConverter Settings(
+                    compBox.isSelected,
+                    nameBox1.text,
+                    nameBox2.text,
+                    choiceBox1.selectionModel.selectedIndex,
+                    choiceBox2.selectionModel.selectedIndex,
+                    choiceBox3.selectionModel.selectedIndex,
+                    choiceBox4.selectionModel.selectedIndex
+                )
+            }
+        }
+        try {
+            val result = settingsDialog.showAndWait()
+            Game(result.get())
+        } catch (e: Exception) {
+            exitProcess(0)
+        }
+
+        ///////////////////////////////////////////////////////start game
+
+        val screen: Rectangle2D = Screen.getPrimary().getBounds()
+
+        val opponentHand = FXCollections.observableArrayList<ImageView>()
+        opponentHand.addAll(Game.opponent.Hand.images())
+        val opponentList = ListView<ImageView>().apply {
+            items = opponentHand
+            minWidth = screen.width / 2;
+            maxWidth = screen.width / 2;
+            maxHeight = screen.height / 6
+            minHeight = screen.height / 6
+            setOrientation(Orientation.HORIZONTAL);
+        }
+
+        val currentHand = FXCollections.observableArrayList<ImageView>()
+        currentHand.addAll(Game.current.Hand.images())
+        val currentList = ListView<ImageView>().apply {
+            items = currentHand
+            minWidth = screen.width / 2;
+            maxWidth = screen.width / 2;
+            maxHeight = screen.height / 6
+            minHeight = screen.height / 6
+            setOrientation(Orientation.HORIZONTAL);
+        }
+
+        val root = VBox().apply {
+            alignment = Pos.TOP_CENTER
+
+            children.addAll(opponentList)
+            children.add(VBox().apply {
+                minHeight = 360.0
+            })
+            children.addAll(currentList)
+            background = Background(BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY))
+        }
+
+        s.apply {
+            title = "Hogwarts"
+            scene = Scene(root, screen.width, screen.height)
+            show()
+        }
+    }
+}
+
+class Game(settings: Settings) {
 
     var p1: Player
     var p2: Player
 
     companion object {
-
         lateinit var ClassRoom: Deck
         lateinit var Curses: Deck
         lateinit var Books: Deck
@@ -36,12 +178,12 @@ class Game(comp: Boolean) {
         Curses.shuffle()
         ClassRoom4.cards.addAll(ClassRoom.draw(4))
 
-        if (comp) {
-            p1 = Human("Vivi", house.Slytherin)
-            p2 = Computer("A Gép", house.Gryffindor)
+        if (settings.comp) {
+            p1 = Human(settings.name1, convertHouse(settings.house1))
+            p2 = Computer(settings.name2, convertHouse(settings.house2))
         } else {
-            p1 = Human("Vivi", house.Slytherin)
-            p2 = Human("Zsombi", house.Ravenclaw)
+            p1 = Human(settings.name1, convertHouse(settings.house1))
+            p2 = Human(settings.name2, convertHouse(settings.house2))
         }
 
         val r = Random.nextBoolean()
@@ -53,11 +195,15 @@ class Game(comp: Boolean) {
             opponent = p1
         }
 
+        p1.createStarterPile(convertDeck(settings.deck1))
+        p2.createStarterPile(convertDeck(settings.deck2))
+
         Tests.newRound()
 
         ////////// TEST SECTION
-
+/*
         val scanner = Scanner(System.`in`)
+
 
         testing@ while (true) {
             while (scanner.hasNextLine()) {
@@ -198,87 +344,31 @@ class Game(comp: Boolean) {
 
         scanner.close()
 
-
-/*
-
-        """
-add macska 1
-add bagoly 1
-        """
-        p1.creasteStarterPile(decktype.StarterCat)
-        p1.DrawPile.shuffle()
-        //p1.Hand.cards.addAll(p1.DrawPile.draw(3))
-        p1.Hand.cards.add(Spell.Arresto_momentum())
-        p1.Hand.cards.add(Spell.Aguamenti())
-        p1.Hand.cards.add(Ally.Albus_Dumbledore())
-        p1.Hand.cards.add(Spell.Alohomora())
-        p1.Hand.cards.add(Item.Altatoital())
-        p1.Hand.cards.add(Item.Aranycikesz())
-        p1.Hand.cards.add(Spell.Ascendio())
-        p1.Hand.cards.add(Ally.Bagoly())
-        p1.Hand.cards.add(Spell.Baziteo())
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        p1.Allies.cards[0].use()
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        var ru = p1.Hand.cards[0].play()
-        if (ru?.req != null) {
-            ru.req(Response(0))
-        }
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        println("------------------")
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-        ru = p1.Allies.cards[1].use()
-        if (ru?.req != null) {
-            ru.req(Response(0))
-        }
-
-        println(p1)
-
-        p1.Hand.cards[0].play()
-
-        println(p1)
-
-
         ///////// END OF TEST SECTION
         */
+
     }
 
+    fun convertHouse(n: Int): house {
+        return when (n) {
+            0 -> house.Ravenclaw
+            1 -> house.Gryffindor
+            2 -> house.Slytherin
+            3 -> house.Hufflepuff
+            else -> house.None
+        }
+    }
 
-    fun start() {
+    fun convertDeck(n: Int): decktype {
+        return when (n) {
+            0 -> decktype.StarterOwl
+            1 -> decktype.StarterCat
+            2 -> decktype.StarterFrog
+            else -> decktype.Empty
+        }
+    }
+
+    fun start(s: Stage?) {
         while (p1.Stuns > 0 && p2.Stuns > 0) {
             while (p1.Health > 0 && p2.Health > 0) {
 

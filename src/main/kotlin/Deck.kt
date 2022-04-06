@@ -2,6 +2,7 @@ import Ally.*
 import Curse.*
 import Item.*
 import Spell.*
+import javafx.scene.image.ImageView
 
 class Deck(val dtype: decktype) {
     var cards: MutableList<Card> = mutableListOf()
@@ -84,6 +85,14 @@ class Deck(val dtype: decktype) {
             }
         }
         return s
+    }
+
+    fun images(): List<ImageView> {
+        val list = mutableListOf<ImageView>()
+        for (card in cards) {
+            list.add(card.image())
+        }
+        return list
     }
 
     override fun toString(): String {

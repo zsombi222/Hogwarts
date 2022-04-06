@@ -1,10 +1,17 @@
+import javafx.geometry.Rectangle2D
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
+import javafx.stage.Screen
+import java.text.Normalizer
+import java.text.Normalizer.normalize
+import java.util.*
+
 enum class Type {
     Item,
     Spell,
     Ally,
     Curse
 }
-
 
 abstract class Card(val House: house, val value: Int, val name: String, val type: Type) {
     open fun play(): Request? {
@@ -51,6 +58,21 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
 
     override fun toString(): String {
         return name
+    }
+
+    fun image(): ImageView {
+        val screen: Rectangle2D = Screen.getPrimary().getBounds()
+        val path = System.getProperty("user.dir")
+        //println("$path\\hp_assets\\cards\\${convName()}")
+        val img = Image("file:$path\\hp_assets\\cards_small\\${convName()}", 0.0, screen.height / 6 - 20, true, true)
+        return ImageView(img)
+    }
+
+    fun convName(): String {
+        var toreturn = name.lowercase(Locale.getDefault())
+        toreturn.replace(' ', '_')
+        toreturn = normalize(toreturn, Normalizer.Form.NFD).replace("[^\\p{ASCII}]".toRegex(), "")
+        return "$toreturn.png"
     }
 }
 
