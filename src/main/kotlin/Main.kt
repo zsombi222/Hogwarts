@@ -1,23 +1,18 @@
 import javafx.application.Application
 import javafx.collections.FXCollections
-import javafx.geometry.Insets
 import javafx.geometry.Orientation
 import javafx.geometry.Pos
-import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.layout.CornerRadii
-import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
+import javafx.scene.layout.*
 import javafx.stage.Screen
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 import java.util.*
 import kotlin.random.Random
 import kotlin.system.exitProcess
+
 
 fun main(args: Array<String>) {
     Application.launch(App::class.java)
@@ -106,18 +101,43 @@ class App() : Application() {
             exitProcess(0)
         }
 
+        Game.current.Allies.cards.add(Macska())
+
         ///////////////////////////////////////////////////////start game
 
-        val screen: Rectangle2D = Screen.getPrimary().getBounds()
+        val screenWidth = Screen.getPrimary().bounds.width
+        val screenHeight = Screen.getPrimary().bounds.height
 
         val opponentHand = FXCollections.observableArrayList<ImageView>()
         opponentHand.addAll(Game.opponent.Hand.images())
         val opponentList = ListView<ImageView>().apply {
             items = opponentHand
-            minWidth = screen.width / 2;
-            maxWidth = screen.width / 2;
-            maxHeight = screen.height / 6
-            minHeight = screen.height / 6
+            minWidth = screenWidth / 2;
+            maxWidth = screenWidth / 2;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
+            setOrientation(Orientation.HORIZONTAL);
+        }
+
+        val opponentAllies = FXCollections.observableArrayList<ImageView>()
+        opponentAllies.addAll(Game.opponent.Allies.images90())
+        val opponentAlliesList = ListView<ImageView>().apply {
+            items = opponentAllies
+            minWidth = screenHeight / 5;
+            maxWidth = screenHeight / 5;
+            maxHeight = screenHeight / 2.5
+            minHeight = screenHeight / 2.5
+            setOrientation(Orientation.VERTICAL);
+        }
+
+        val opponentPlayed = FXCollections.observableArrayList<ImageView>()
+        opponentPlayed.addAll(Game.opponent.Played.images90())
+        val opponentPlayedList = ListView<ImageView>().apply {
+            items = opponentPlayed
+            minWidth = screenWidth / 2;
+            maxWidth = screenWidth / 2;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
             setOrientation(Orientation.HORIZONTAL);
         }
 
@@ -125,27 +145,112 @@ class App() : Application() {
         currentHand.addAll(Game.current.Hand.images())
         val currentList = ListView<ImageView>().apply {
             items = currentHand
-            minWidth = screen.width / 2;
-            maxWidth = screen.width / 2;
-            maxHeight = screen.height / 6
-            minHeight = screen.height / 6
+            minWidth = screenWidth / 2;
+            maxWidth = screenWidth / 2;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
             setOrientation(Orientation.HORIZONTAL);
         }
 
+        val currentAllies = FXCollections.observableArrayList<ImageView>()
+        currentAllies.addAll(Game.current.Allies.images90())
+        val currentAliiesList = ListView<ImageView>().apply {
+            items = currentAllies
+            minWidth = screenHeight / 5;
+            maxWidth = screenHeight / 5;
+            maxHeight = screenHeight / 2.5
+            minHeight = screenHeight / 2.5
+            setOrientation(Orientation.VERTICAL);
+        }
+
+        val currentPlayed = FXCollections.observableArrayList<ImageView>()
+        currentPlayed.addAll(Game.current.Played.images90())
+        val currentPlayedList = ListView<ImageView>().apply {
+            items = currentPlayed
+            minWidth = screenWidth / 2;
+            maxWidth = screenWidth / 2;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
+            setOrientation(Orientation.VERTICAL);
+        }
+
+        val useAllyBtn = Button().apply {
+            text = "Szövetséges használata"
+            style = "-fx-font-size:${screenHeight / 50}"
+        }
+
+        val useAllyPane = StackPane().apply {
+            alignment = Pos.BOTTOM_CENTER
+            minWidth = screenWidth / 4;
+            maxWidth = screenWidth / 4;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
+            children.add(VBox().apply {
+                children.add(VBox().apply {
+                    maxHeight = screenHeight / 10
+                    minHeight = screenHeight / 10
+                })
+                children.add(useAllyBtn)
+                alignment = Pos.CENTER
+            })
+        }
+
+        val gamegrid = GridPane().apply {
+            //alignment = Pos.TOP_LEFT
+            add(VBox().apply {
+                children.add(opponentAlliesList)
+                alignment = Pos.CENTER
+            }, 0, 0, 1, 2)
+            add(opponentList, 1, 0, 2, 1)
+            add(opponentPlayedList, 1, 1, 2, 1)
+
+            add(useAllyPane, 0, 2, 1, 1)
+            //isGridLinesVisible = true
+            add(currentList, 1, 4, 2, 1)
+            add(VBox().apply {
+                children.add(currentAliiesList)
+                alignment = Pos.CENTER
+            }, 0, 3, 1, 2)
+            add(currentPlayedList, 1, 3, 2, 1)
+        }
+        /*val stackPanes = mutableListOf<StackPane>()
+        var n = 0
+        for (row in 0 until 5) {
+            for (col in 4 - 1 downTo 0) {
+                val stackPane = StackPane()
+
+                // To occupy fixed space set the max and min size of
+                // stackpanes.
+                // stackPane.setPrefSize(150.0, 200.0);
+                stackPane.setMaxSize(screen.width / 4, screen.height / 5)
+                stackPane.setMinSize(screen.width / 4, screen.height / 5)
+                stackPane.children.add(Label(java.lang.String.valueOf(n++)))
+                gamegrid.add(stackPane, col, row)
+                stackPanes.add(stackPane)
+                //num--
+            }
+        }
+
+
+         */
+
         val root = VBox().apply {
             alignment = Pos.TOP_CENTER
-
-            children.addAll(opponentList)
+            children.add(gamegrid)
+            /*children.addAll(opponentList)
             children.add(VBox().apply {
                 minHeight = 360.0
             })
             children.addAll(currentList)
             background = Background(BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY))
+
+             */
         }
 
         s.apply {
+            isFullScreen = true
             title = "Hogwarts"
-            scene = Scene(root, screen.width, screen.height)
+            scene = Scene(root, screenHeight, screenHeight)
             show()
         }
     }

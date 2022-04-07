@@ -95,6 +95,14 @@ class Deck(val dtype: decktype) {
         return list
     }
 
+    fun images90(): List<ImageView> {
+        val list = mutableListOf<ImageView>()
+        for (card in cards) {
+            list.add(card.image90())
+        }
+        return list
+    }
+
     override fun toString(): String {
         var s = ""
         for (i in 0 until cards.size) {
