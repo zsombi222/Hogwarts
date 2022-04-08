@@ -174,6 +174,18 @@ class App() : Application() {
             setOrientation(Orientation.VERTICAL);
         }
 
+        val shop = FXCollections.observableArrayList<ImageView>()
+        shop.addAll(Game.ClassRoom4.images())
+        val shopList = ListView<ImageView>().apply {
+            items = shop
+            minWidth = screenWidth / 4;
+            maxWidth = screenWidth / 4;
+            maxHeight = screenHeight / 5
+            minHeight = screenHeight / 5
+            setOrientation(Orientation.HORIZONTAL);
+        }
+        
+
         val useAllyBtn = Button().apply {
             text = "Szövetséges használata"
             style = "-fx-font-size:${screenHeight / 50}"
@@ -195,6 +207,157 @@ class App() : Application() {
             })
         }
 
+        val playButton = Button("PLAY").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+        val buyButton = Button("BUY").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+        val dropButton = Button("DROP").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+        val turnButton = Button("TURN").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+        val healButton = Button("HEAL").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+        val attackButton = Button("ATTACK").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+        }
+
+        val coinButton = Button("COINS").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val hpButton = Button("${Game.current.Health}/${Game.current.Max_health}").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val stunButton = Button("${Game.current.Stuns}").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val nameButton = Button(Game.current.name).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val ohealButton = Button("HEAL").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+        val oattackButton = Button("ATTACK").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val ocoinButton = Button("COINS").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+            isDisable = true
+        }
+
+        val ohpButton = Button("${Game.opponent.Health}/${Game.opponent.Max_health}").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val ostunButton = Button("${Game.opponent.Stuns}").apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+        val onameButton = Button(Game.opponent.name).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+            minWidth = screenWidth / 8
+            isDisable = true
+        }
+
+
+        val discardSizeText = Label(Game.current.DiscardPile.cards.size.toString()).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+        }
+        val drawSizeText = Label(Game.current.DrawPile.cards.size.toString()).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+        }
+
+        val odiscardSizeText = Label(Game.opponent.DiscardPile.cards.size.toString()).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+        }
+        val odrawSizeText = Label(Game.opponent.DrawPile.cards.size.toString()).apply {
+            style = "-fx-font-size:${screenHeight / 50}"
+        }
+
+        val ctrlPane = StackPane().apply {
+            children.add(GridPane().apply {
+                add(playButton, 0, 0)
+                add(buyButton, 1, 0)
+                add(dropButton, 0, 1)
+                add(turnButton, 1, 1)
+                add(discardSizeText, 0, 2)
+                add(drawSizeText, 1, 2)
+                hgap = 10.0
+                vgap = 10.0
+            })
+        }
+
+        val actionPane = StackPane().apply {
+            children.add(GridPane().apply {
+                add(coinButton, 0, 0)
+                add(attackButton, 1, 0)
+                add(healButton, 0, 1)
+                add(hpButton, 1, 1)
+                add(stunButton, 0, 2)
+                add(nameButton, 1, 2)
+                hgap = 10.0
+                vgap = 10.0
+            })
+        }
+
+        val octrlPane = StackPane().apply {
+            children.add(GridPane().apply {
+                add(odiscardSizeText, 0, 2)
+                add(odrawSizeText, 1, 2)
+                hgap = 10.0
+                vgap = 10.0
+            })
+        }
+
+        val oactionPane = StackPane().apply {
+            children.add(GridPane().apply {
+                add(ocoinButton, 0, 0)
+                add(oattackButton, 1, 0)
+                add(ohealButton, 0, 1)
+                add(ohpButton, 1, 1)
+                add(ostunButton, 0, 2)
+                add(onameButton, 1, 2)
+                add(odiscardSizeText, 0, 3)
+                add(odrawSizeText, 1, 3)
+                hgap = 10.0
+                vgap = 10.0
+            })
+        }
+
+
         val gamegrid = GridPane().apply {
             //alignment = Pos.TOP_LEFT
             add(VBox().apply {
@@ -212,39 +375,16 @@ class App() : Application() {
                 alignment = Pos.CENTER
             }, 0, 3, 1, 2)
             add(currentPlayedList, 1, 3, 2, 1)
+            add(ctrlPane, 3, 4, 1, 1)
+            add(actionPane, 3, 3, 1, 1)
+            add(oactionPane, 3, 0, 1, 1)
+            add(octrlPane, 3, 1, 1, 1)
+            add(shopList, 3, 2, 1, 1)
         }
-        /*val stackPanes = mutableListOf<StackPane>()
-        var n = 0
-        for (row in 0 until 5) {
-            for (col in 4 - 1 downTo 0) {
-                val stackPane = StackPane()
-
-                // To occupy fixed space set the max and min size of
-                // stackpanes.
-                // stackPane.setPrefSize(150.0, 200.0);
-                stackPane.setMaxSize(screen.width / 4, screen.height / 5)
-                stackPane.setMinSize(screen.width / 4, screen.height / 5)
-                stackPane.children.add(Label(java.lang.String.valueOf(n++)))
-                gamegrid.add(stackPane, col, row)
-                stackPanes.add(stackPane)
-                //num--
-            }
-        }
-
-
-         */
 
         val root = VBox().apply {
             alignment = Pos.TOP_CENTER
             children.add(gamegrid)
-            /*children.addAll(opponentList)
-            children.add(VBox().apply {
-                minHeight = 360.0
-            })
-            children.addAll(currentList)
-            background = Background(BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY))
-
-             */
         }
 
         s.apply {

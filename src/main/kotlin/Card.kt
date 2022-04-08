@@ -63,7 +63,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     fun image(): ImageView {
         val screen: Rectangle2D = Screen.getPrimary().getBounds()
         val path = System.getProperty("user.dir")
-        //println("$path\\hp_assets\\cards\\${convName()}")
+        //println("$path\\hp_assets\\cards_small\\${convName()}")
         val img = Image("file:$path\\hp_assets\\cards_small\\${convName()}", 0.0, screen.height / 5 - 20, true, true)
         return ImageView(img)
     }
@@ -71,26 +71,16 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     fun image90(): ImageView {
         val screen: Rectangle2D = Screen.getPrimary().getBounds()
         val path = System.getProperty("user.dir")
-        //println("$path\\hp_assets\\cards\\${convName()}")
+        //println("$path\\hp_assets\\cards_small_rotate\\${convName()}")
         val img =
             Image("file:$path\\hp_assets\\cards_small_rotate\\${convName()}", screen.height / 5 - 20, 0.0, true, true)
         val imgView = ImageView(img)
-        //val w = img.width
-        //val h = img.height
-        //imgView.rotate = 90.0
-        //val rotate = Rotate(90.0, 0.0, 0.0)
-        //val trans = Translate(0.0, -350.0, 0.0)
-        //imgView.transforms.add(rotate)
-        //imgView.transforms.add(trans)
-        //imgView.fitHeight = w
-        //imgView.fitWidth = h
-        //imgView.viewport = Rectangle2D(0.0, 0.0, h, w)
         return imgView
     }
 
     fun convName(): String {
         var toreturn = name.lowercase(Locale.getDefault())
-        toreturn.replace(' ', '_')
+        toreturn = toreturn.replace(" ", "_")
         toreturn = normalize(toreturn, Normalizer.Form.NFD).replace("[^\\p{ASCII}]".toRegex(), "")
         return "$toreturn.png"
     }
