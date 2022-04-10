@@ -34,7 +34,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     open fun discard(p: Player = Game.current) {
         p.Played.cards.remove(this)
         p.Allies.cards.remove(this)
-        println("$name eldobása a kijátszott lapok közül...")
+        println("$name eltávolítása a kijátszott lapok közül...")
         p.DiscardPile.cards.add(this)
     }
 
@@ -64,7 +64,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
         val screen: Rectangle2D = Screen.getPrimary().getBounds()
         val path = System.getProperty("user.dir")
         //println("$path\\hp_assets\\cards_small\\${convName()}")
-        val img = Image("file:$path\\hp_assets\\cards_small\\${convName()}", 0.0, screen.height / 5 - 20, true, true)
+        val img = Image("file:$path/hp_assets/cards_small/${convName()}", 0.0, screen.height / 5 - 20, true, true)
         return ImageView(img)
     }
 
@@ -73,7 +73,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
         val path = System.getProperty("user.dir")
         //println("$path\\hp_assets\\cards_small_rotate\\${convName()}")
         val img =
-            Image("file:$path\\hp_assets\\cards_small_rotate\\${convName()}", screen.height / 5 - 20, 0.0, true, true)
+            Image("file:$path/hp_assets/cards_small_rotate/${convName()}", screen.height / 5 - 20, 0.0, true, true)
         val imgView = ImageView(img)
         return imgView
     }
@@ -86,103 +86,7 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     }
 }
 
-class Gildroy_Lockhart : Card(house.Ravenclaw, 5, "Gildroy Lockhart", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Ginny_Weasley : Card(house.None, 4, "Ginny Weasley", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Gregory_Monstro : Card(house.Slytherin, 6, "Gregory Monstro", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Harry_Potter : Card(house.Gryffindor, 6, "Harry Potter", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Hermione_Granger : Card(house.Gryffindor, 6, "Hermione Granger", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Imperio : Card(house.Slytherin, 4, "Imperio", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Invito : Card(house.None, 3, "Invito", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Konyv : Card(house.None, 3, "Könyv", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Kritalygomb : Card(house.Ravenclaw, 3, "Kritálygömb", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Locomotor : Card(house.Ravenclaw, 6, "Locomotor", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Lumos : Card(house.None, 6, "Lumos", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Luna_Lovegood : Card(house.Ravenclaw, 6, "Luna Lovegood", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Macska : Card(house.None, 0, "Macska", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Magifix_ragasztoszalag : Card(house.Ravenclaw, 4, "Magifix ragasztószalag", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Mandragora : Card(house.Hufflepuff, 4, "Mandragóra", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Mcgalacony_Professzor : Card(house.Gryffindor, 7, "McGalacony Professzor", Type.Ally) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Neville_Longbottom : Card(house.None, 4, "Neville Longbottom", Type.Ally) {
     override fun play(): Request? {
         return null
     }
@@ -194,27 +98,65 @@ class Nymphadora_Tonks : Card(house.Hufflepuff, 6, "Nymphadora Tonks", Type.Ally
     }
 }
 
-class Obstructo : Card(house.None, 7, "Obstructo", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Oppugno : Card(house.None, 5, "Oppugno", Type.Spell) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
-class Penna : Card(house.Hufflepuff, 3, "Penna", Type.Item) {
-    override fun play(): Request? {
-        return null
-    }
-}
-
 class Perselus_Piton : Card(house.Slytherin, 7, "Perselus Piton", Type.Ally) {
+    var used = false
+    var player: Player? = null
     override fun play(): Request? {
+        player = Game.current
+        used = false
+        Events.roundEndedEvents[this] = ::reset
+        super.play()
         return null
+    }
+
+    override fun discard(p: Player) {
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        super.discard(p)
+    }
+
+    override fun destroy(p: Player) {
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        super.destroy(p)
+    }
+
+    override fun use(): Request? {
+        if (!used && Game.current == player) {
+            return Request(::choose, "0 - 2db villám\n1 - 2db szív\n3 - Válassz egy elpusztítani kívánt rontást\n${Game.current.Hand}")
+        }
+        return null
+    }
+
+    fun choose(r: Response): Boolean {
+        try {
+            if (Game.current.Hand.cards[r.n].type != Type.Spell) {
+                println("Varázslatot kell kiválasztanod")
+                used = false
+                return true
+            }
+            Game.current.Hand.cards[r.n].drop()
+            println("Eldobtál egy varázslatot")
+            Game.current.apply {
+                Attacks++
+                Hearts++
+                Hand.cards.addAll(DrawPile.draw(1))
+            }
+            used = true
+            return true
+        } catch (e: Exception) {
+            println("Nincs ilyen lap")
+            used = false
+            return true
+        }
+    }
+
+    fun reset() {
+        used = false
     }
 }
 

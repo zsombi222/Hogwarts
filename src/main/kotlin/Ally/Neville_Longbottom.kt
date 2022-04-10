@@ -1,2 +1,60 @@
-package Ally 
+package Ally
 
+import Card
+import Events
+import Game
+import Player
+import Request
+import Type
+import house
+
+class Neville_Longbottom : Card(house.None, 4, "Neville Longbottom", Type.Ally) {
+    var used = false
+    var player: Player? = null
+    override fun play(): Request? {
+        player = Game.current
+        used = false
+        Events.roundEndedEvents[this] = ::reset
+        Events.itemPlayedEvents[this] = ::skill
+        super.play()
+        return null
+    }
+
+    override fun discard(p: Player) {
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        try {
+            Events.itemPlayedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        super.discard(p)
+    }
+
+    override fun destroy(p: Player) {
+        try {
+            Events.roundEndedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        try {
+            Events.itemPlayedEvents.remove(this)
+        } catch (e: Exception) {
+        }
+        super.destroy(p)
+    }
+
+    fun reset() {
+        used = false
+    }
+
+    fun skill() {
+        if (!used && Game.current == player && !Events.csalan) {
+            used = true
+            Game.current.apply {
+                Coins++
+                Hearts++
+            }
+        }
+    }
+}

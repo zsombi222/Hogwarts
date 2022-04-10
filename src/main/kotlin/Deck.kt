@@ -11,7 +11,7 @@ class Deck(val dtype: decktype) {
         cards.shuffle()
     }
 
-    fun draw(n: Int): (List<Card>) {
+    fun draw(n: Int): List<Card> {
         val list = mutableListOf<Card>()
         if (Events.remdenever && Game.current.blockDrawPile(this)) {
             return list
@@ -59,6 +59,15 @@ class Deck(val dtype: decktype) {
             }
         }
         return true
+    }
+
+    fun hasItems(): Boolean {
+        cards.forEach() {
+            if (it.type == Type.Item) {
+                return true
+            }
+        }
+        return false
     }
 
     fun printCurses(): String {
@@ -240,6 +249,8 @@ class Deck(val dtype: decktype) {
             cards.add(T::class.java.getDeclaredConstructor().newInstance())
         }
     }
+
+
 
 
 }

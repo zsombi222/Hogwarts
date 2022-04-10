@@ -46,17 +46,27 @@ class Gildroy_Lockhart : Card(house.Ravenclaw, 5, "Gildroy Lockhart", Type.Ally)
         return null
     }
 
+
     fun dropcard(r: Response): Boolean {
-        return try {
+        if (Game.opponent.Hand.hasOnlyCurses()) {
+            println("Már csak rontások maradtak")
+            return true
+        }
+        try {
             val c1 = Game.current.Hand.cards[r.n]
             val c2 = Game.opponent.Hand.cards[r.text.toInt()]
+            if (c2.type == Type.Curse) {
+                println("NEM rontás lapot!")
+                return true
+            } //Game.opponent.DiscardPile.cards.add(Game.opponent.Hand.drawIdx(r.n))
             c1.drop()
             c2.drop()
+            println("Eldobtál egy lapot és az ellenfeled is egy nem rontás lapot")
             used = true
-            true
+            return true
         } catch (e: Exception) {
-            println("Nem sikerült")
-            true
+            println("Nincs ilyen lap")
+            return true
         }
     }
 

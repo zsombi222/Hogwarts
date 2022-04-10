@@ -204,7 +204,7 @@ class Tests {
             "levicorpus",
             "remdenever_rontas",
             "sectumsempra",
-            "konyv",
+            "konyvek",
             "alohomora",
             "ust",
             "palca",

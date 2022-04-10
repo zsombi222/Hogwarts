@@ -57,18 +57,29 @@ abstract class Player(open val name: String, open var House: house, val dtype: d
             println("Először a rontásokat kell kijátszanod")
             return
         }
+        val temp: Card = if (idx == 4 && Game.Books.cards.size > 0){
+            Game.Books.cards[0]
+        } else{
+            Game.ClassRoom4.cards[idx]
+        }
         var plus = 0
         if (Events.carbunculus)
             plus = Events.carbunculusN
-        val temp = Game.ClassRoom4.cards[idx]
-        if (Coins >= Game.ClassRoom4.cards[idx].value + plus) {
-            Coins -= Game.ClassRoom4.cards[idx].value + plus
-            when (Game.ClassRoom4.cards[idx].type) {
+
+        if (Coins >= temp.value + plus) {
+            Coins -= temp.value + plus
+            when (temp.type) {
                 Type.Item -> {
                     if (Events.newItemToTop) {
-                        DrawPile.cards.add(0, Game.ClassRoom4.drawIdx(idx))
+                        if (temp.name == "Könyv")
+                            DrawPile.cards.addAll(0, Game.Books.draw(1))
+                        else
+                            DrawPile.cards.add(0, Game.ClassRoom4.drawIdx(idx))
                     } else {
-                        DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
+                        if (temp.name == "Könyv")
+                            DiscardPile.cards.addAll(Game.Books.draw(1))
+                        else
+                            DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
                     }
                 }
                 Type.Spell -> {
@@ -87,7 +98,8 @@ abstract class Player(open val name: String, open var House: house, val dtype: d
                 }
                 else -> DiscardPile.cards.add(Game.ClassRoom4.drawIdx(idx))
             }
-            Game.ClassRoom4.cards.addAll(Game.ClassRoom.draw(1))
+            if(temp.name != "Könyv")
+                Game.ClassRoom4.cards.addAll(Game.ClassRoom.draw(1))
             println("Megvetted a ${temp.name} lapot ${temp.value + plus} érméért\n${Coins}db érméd maradt")
         } else {
             println("Nincs elég pénzed (${Coins}/${temp.value + plus})")

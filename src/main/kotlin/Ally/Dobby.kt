@@ -40,7 +40,7 @@ class Dobby : Card(house.None, 4, "Dobby a házimanó", Type.Ally) {
     override fun use(): Request? {
         if (!used && Game.current == player) {
             used = true
-            return Request(::dropcard, "Drop a card [0,1,2,3}]")
+            return Request(::dropcard, "Destroy a card [0,1,2,3}]")
         }
         return null
     }

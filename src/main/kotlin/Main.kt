@@ -1,3 +1,4 @@
+import Ally.Macska
 import javafx.application.Application
 import javafx.collections.FXCollections
 import javafx.geometry.Orientation
@@ -40,7 +41,7 @@ class App() : Application() {
         val houseChoices =
             FXCollections.observableArrayList("Ravenclaw", "Gryffindor", "Slytherin", "Hufflepuff")
         val starterPileChoices =
-            FXCollections.observableArrayList("Bagoly", "Macska", "Varangy")
+            FXCollections.observableArrayList("Bagoly", "Ally.Macska", "Varangy")
 
         val startBtn = ButtonType("Start", ButtonBar.ButtonData.OK_DONE)
         val cancelBtn = ButtonType("Kilépés", ButtonBar.ButtonData.CANCEL_CLOSE)
@@ -61,7 +62,7 @@ class App() : Application() {
             value = "Bagoly"
         }
         choiceBox4.apply {
-            value = "Macska"
+            value = "Ally.Macska"
         }
 
         val settingsRoot = VBox().apply {
@@ -446,9 +447,10 @@ class Game(settings: Settings) {
         Tests.newRound()
 
         ////////// TEST SECTION
-/*
+
         val scanner = Scanner(System.`in`)
 
+        Game.current.Coins = 100
 
         testing@ while (true) {
             while (scanner.hasNextLine()) {
@@ -562,6 +564,9 @@ class Game(settings: Settings) {
                             current.buy(cmd[1].toInt())
                         } catch (e: Exception) {
                             println(ClassRoom4.valPrint())
+                            if(Game.Books.cards.size > 0){
+                                println("\t4. Könyv (3)")
+                            }
                         }
                     }
                     "end" -> {
@@ -590,7 +595,7 @@ class Game(settings: Settings) {
         scanner.close()
 
         ///////// END OF TEST SECTION
-        */
+
 
     }
 

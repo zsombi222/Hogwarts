@@ -27,7 +27,7 @@ class Exmamoriam : Card(house.Ravenclaw, 5, "Exmamoriam", Type.Spell) {
         }
         return Request(
             ::choose,
-            "${Game.opponent.name}, válassz egy nem rontás lapot, amit eldobsz [0-${Game.opponent.Hand.cards.size - 1}]."
+            "${Game.opponent.name}, válassz egy nem rontás lapot, amit eldobsz [0-${Game.opponent.Hand.cards.size - 1}]\n${Game.opponent.Hand}."
         )
     }
 
@@ -41,7 +41,7 @@ class Exmamoriam : Card(house.Ravenclaw, 5, "Exmamoriam", Type.Spell) {
                 println("NEM rontás lapot!")
                 return false
             }
-            Game.opponent.DiscardPile.cards.add(Game.opponent.Hand.drawIdx(r.n))
+            Game.opponent.Hand.drawIdx(r.n).drop()
             println("Eldobott egy nem rontás lapot")
             return true
         } catch (e: Exception) {
