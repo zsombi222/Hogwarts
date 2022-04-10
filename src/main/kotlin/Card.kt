@@ -2,6 +2,7 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.stage.Screen
+import java.io.File
 import java.text.Normalizer
 import java.text.Normalizer.normalize
 import java.util.*
@@ -14,6 +15,9 @@ enum class Type {
 }
 
 abstract class Card(val House: house, val value: Int, val name: String, val type: Type) {
+
+    val sep = File.pathSeparatorChar
+
     open fun play(): Request? {
         Game.current.Hand.cards.remove(this)
         if (this.type == Type.Ally) {
@@ -63,17 +67,27 @@ abstract class Card(val House: house, val value: Int, val name: String, val type
     fun image(): ImageView {
         val screen: Rectangle2D = Screen.getPrimary().getBounds()
         val path = System.getProperty("user.dir")
-        //println("$path\\hp_assets\\cards_small\\${convName()}")
-        val img = Image("file:$path/hp_assets/cards_small/${convName()}", 0.0, screen.height / 5 - 20, true, true)
+        val img = Image(
+            "file:$path${sep}hp_assets${sep}cards_small${sep}${convName()}",
+            0.0,
+            screen.height / 5 - 20,
+            true,
+            true
+        )
         return ImageView(img)
     }
 
     fun image90(): ImageView {
         val screen: Rectangle2D = Screen.getPrimary().getBounds()
         val path = System.getProperty("user.dir")
-        //println("$path\\hp_assets\\cards_small_rotate\\${convName()}")
         val img =
-            Image("file:$path/hp_assets/cards_small_rotate/${convName()}", screen.height / 5 - 20, 0.0, true, true)
+            Image(
+                "file:$path${sep}hp_assets${sep}cards_small_rotate${sep}${convName()}",
+                screen.height / 5 - 20,
+                0.0,
+                true,
+                true
+            )
         val imgView = ImageView(img)
         return imgView
     }
